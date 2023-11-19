@@ -1,0 +1,39 @@
+name: Deployment
+
+concurrency:
+  group: production
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_TAG_LATEST: ${{ secrets.DOCKER_TAG_LATEST }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  ID_RSA: ${{ secrets.ID_RSA }}
+  SERVER_USER: ${{ secrets.SERVER_USER }}
+  SERVER_IP: ${{ secrets.SERVER_IP }}
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: publish
+        uses: actions/checkout@v4
+      - run: docker build -t $DOCKER_TAG_LATEST .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run: docker push $DOCKER_TAG_LATEST
+      - name: deploy
+        uses: actions/checkout@v4
+      - run: chmod og= $ID_RSA
+      - run: apk update && apk add openssh-client
+      - run: ssh-keygen -y -f $ID_RSA
+      - run: ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+      - run: ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $DOCKER_TAG_LATEST"
+      - run: ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/hack && docker-compose down || true"
+      - run: ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/hack && docker-compose up"
+      - run: echo "This job's status is ${{ job.status }}."
