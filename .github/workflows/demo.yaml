@@ -19,7 +19,7 @@ env:
 
 jobs:
   deployment:
-    runs-on: ubuntu-latest
+    runs-on: alpine:latest
     environment: production
     steps:
       - name: publish
