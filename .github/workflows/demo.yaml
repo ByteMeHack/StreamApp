@@ -29,7 +29,6 @@ jobs:
       - run: docker push $DOCKER_TAG_LATEST
       - name: deploy
         uses: actions/checkout@v4
-      - run: chmod og= $ID_RSA
       - run: apk update && apk add openssh-client
       - run: ssh-keygen -y -f $ID_RSA
       - run: ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
