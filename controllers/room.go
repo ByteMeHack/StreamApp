@@ -18,13 +18,11 @@ type RoomHandler struct {
 
 func (h *RoomHandler) Register(e *gin.Engine) {
 	root := e.Group("/", CORSMiddleware(), CheckAuthToken)
-	root.OPTIONS("rooms")
 	root.POST("/rooms", h.Save)
-	root.OPTIONS("rooms/:id")
-	root.POST("/rooms/:id", h.JoinRoom)
-	root.OPTIONS("rooms")
+	root.OPTIONS("/rooms")
 	root.GET("/rooms", h.Get)
 	root.OPTIONS("rooms/:id")
+	root.POST("/rooms/:id", h.JoinRoom)
 	root.GET("/rooms/:id", h.GetByID)
 }
 

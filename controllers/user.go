@@ -86,8 +86,14 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("couldn't create token: %s", err.Error())})
 		return
 	}
-
-	c.SetCookie("XAuthorizationToken", token, 10000, "/", "bytemehack.ru", false, false)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "XAuthorizationToken",
+		Value:    token,
+		SameSite: 4,
+		Domain:   "bytemehack.ru",
+		Path:     "/",
+		MaxAge:   36000,
+	})
 	c.JSON(http.StatusOK, user)
 }
 
@@ -125,7 +131,14 @@ func (h *UserHandler) Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't create token: %s", err.Error())})
 		return
 	}
-	c.SetCookie("XAuthorizationToken", token, 10000, "/", "bytemehack.ru", false, false)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "XAuthorizationToken",
+		Value:    token,
+		SameSite: 4,
+		Domain:   "bytemehack.ru",
+		Path:     "/",
+		MaxAge:   36000,
+	})
 	c.JSON(http.StatusOK, user)
 }
 
