@@ -18,18 +18,21 @@ env:
   SERVER_IP: ${{ secrets.SERVER_IP }}
 
 jobs:
-  deployment:
-    runs-on: ubuntu-latest
-    environment: production
+  publish:
+    runs-on: ubuntu:latest
     steps:
       - name: publish
         uses: actions/checkout@v4
       - run: docker build -t $DOCKER_TAG_LATEST .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run: docker push $DOCKER_TAG_LATEST
+  deployment:
+    needs: [publish]
+    runs-on: ubuntu:latest
+    environment: production
+    steps:
       - name: deploy
         uses: actions/checkout@v4
-      - run: apk update && apk add openssh-client
       - run: ssh-keygen -y -f $ID_RSA
       - run: ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
       - run: ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $DOCKER_TAG_LATEST"
