@@ -18,15 +18,19 @@ env:
   SERVER_IP: ${{ secrets.SERVER_IP }}
 
 jobs:
-  deployment:
+  publish:
     runs-on: alpine:latest
-    environment: production
     steps:
       - name: publish
         uses: actions/checkout@v4
       - run: docker build -t $DOCKER_TAG_LATEST .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run: docker push $DOCKER_TAG_LATEST
+  deployment:
+    needs: [publish]
+    runs-on: alpine:latest
+    environment: production
+    steps:
       - name: deploy
         uses: actions/checkout@v4
       - run: apk update && apk add openssh-client
