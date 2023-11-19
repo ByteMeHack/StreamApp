@@ -19,7 +19,7 @@ env:
 
 jobs:
   publish:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
       - name: publish
         uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
       - run: docker push $DOCKER_TAG_LATEST
   deployment:
     needs: [publish]
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     environment: production
     steps:
       - name: deploy
