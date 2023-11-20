@@ -82,15 +82,6 @@ const docTemplate = `{
                     "accounts"
                 ],
                 "summary": "Get general account info",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization token cookie",
-                        "name": "Set-Cookie",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -129,7 +120,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -171,9 +162,18 @@ const docTemplate = `{
                 "summary": "Create new room",
                 "parameters": [
                     {
+                        "description": "Room body",
+                        "name": "room",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Room"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -216,7 +216,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -257,7 +257,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -389,10 +389,10 @@ const docTemplate = `{
                 "contents": {
                     "type": "string"
                 },
-                "type": {
+                "message_type": {
                     "$ref": "#/definitions/models.MessageType"
                 },
-                "userId": {
+                "user_id": {
                     "type": "integer"
                 }
             }
@@ -469,7 +469,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "46.19.65.33:8080",
+	Host:             "http://bytemehack.ru/api/",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Swagger Example API",

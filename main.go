@@ -33,10 +33,8 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host localhost:8080
-// @BasePath /
-// @host 46.19.65.33:8080
-// @BasePath /
+// @host bytemehack.ru
+// @BasePath /api
 func main() {
 	db, err := database.NewDatabase()
 	if err != nil {

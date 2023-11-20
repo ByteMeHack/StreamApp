@@ -45,7 +45,8 @@ func NewRoomHandler(repo RoomRepository) *RoomHandler {
 // @Tags room
 // @Accept  json
 // @Produce  json
-// @Param Authorization header string true "Authorization token"
+// @Param room body models.Room true "Room body"
+// @Param Set-Cookie header string true "Authorization token"
 // @Success 200 {object} models.Room
 // @Failure 400 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
@@ -82,7 +83,7 @@ func (h *RoomHandler) Save(c *gin.Context) {
 // @Tags room
 // @Accept  json
 // @Produce  json
-// @Param Authorization header string true "Authorization token"
+// @Param Set-Cookie header string true "Authorization token"
 // @Success 200 {object} models.Room
 // @Failure 400 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
@@ -130,7 +131,7 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 // @Tags room
 // @Accept  json
 // @Produce  json
-// @Param Authorization header string true "Authorization token"
+// @Param Set-Cookie header string true "Authorization token"
 // @Success 200 {object} models.Room
 // @Failure 400 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
@@ -178,17 +179,16 @@ func (h *RoomHandler) GetByID(c *gin.Context) {
 // @Tags room
 // @Accept  json
 // @Produce  json
-// @Param Authorization header string true "Authorization token"
+// @Param Set-Cookie header string true "Authorization token"
 // @Success 200 {object} []models.Room
 // @Failure 400 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
 // @Router /rooms [get]
 func (h *RoomHandler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
-	c.Request.ParseForm()
 	rooms, err := h.repo.Get(ctx)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
+		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get all rooms: %s", err.Error())})
 		return
 	}
 	c.JSON(http.StatusOK, rooms)

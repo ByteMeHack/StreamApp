@@ -1,4 +1,4 @@
-basePath: /
+basePath: /api
 definitions:
   handlers.ErrorMessage:
     properties:
@@ -9,9 +9,9 @@ definitions:
     properties:
       contents:
         type: string
-      type:
+      message_type:
         $ref: '#/definitions/models.MessageType'
-      userId:
+      user_id:
         type: integer
     type: object
   models.MessageType:
@@ -60,7 +60,7 @@ definitions:
       password:
         type: string
     type: object
-host: 46.19.65.33:8080
+host: bytemehack.ru
 info:
   contact:
     email: support@swagger.io
@@ -108,12 +108,6 @@ paths:
     get:
       consumes:
       - application/json
-      parameters:
-      - description: Authorization token cookie
-        in: header
-        name: Set-Cookie
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -139,7 +133,7 @@ paths:
       parameters:
       - description: Authorization token
         in: header
-        name: Authorization
+        name: Set-Cookie
         required: true
         type: string
       produces:
@@ -166,9 +160,15 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: Room body
+        in: body
+        name: room
+        required: true
+        schema:
+          $ref: '#/definitions/models.Room'
       - description: Authorization token
         in: header
-        name: Authorization
+        name: Set-Cookie
         required: true
         type: string
       produces:
@@ -196,7 +196,7 @@ paths:
       parameters:
       - description: Authorization token
         in: header
-        name: Authorization
+        name: Set-Cookie
         required: true
         type: string
       produces:
@@ -223,7 +223,7 @@ paths:
       parameters:
       - description: Authorization token
         in: header
-        name: Authorization
+        name: Set-Cookie
         required: true
         type: string
       produces:

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/folklinoff/hack_and_change/dto"
 	"github.com/folklinoff/hack_and_change/models"
 	auth "github.com/folklinoff/hack_and_change/pkg/auth"
 	"github.com/gin-gonic/gin"
@@ -53,19 +54,20 @@ type LoginResponseDTO struct {
 // @Description Sign up using email, password
 // @Tags accounts
 // @Accept  json
-// @Param user body models.User true "User credentials"
+// @Param user body dto.SignupRequestDTO true "User credentials"
 // @Produce  json
-// @Success 200 {object} models.User
+// @Success 200 {object} dto.UserModelResponseDTO
 // @Failure 400 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
 // @Router /signup [post]
 func (h *UserHandler) SignUp(c *gin.Context) {
 	ctx := c.Request.Context()
-	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	var req dto.SignupRequestDTO
+	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind user model: %s", err.Error())})
 		return
 	}
+	user := dto.SignupRequestDTOToUserModel(req)
 	_, err := h.repo.GetByMail(ctx, user.Email)
 	innerErr := errors.Unwrap(err)
 	switch {
@@ -87,14 +89,14 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 		return
 	}
 	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     "XAuthorizationToken",
-		Value:    token,
-		SameSite: 4,
-		Domain:   "bytemehack.ru",
-		Path:     "/",
-		MaxAge:   36000,
+		Name:   "XAuthorizationToken",
+		Value:  token,
+		Domain: "bytemehack.ru",
+		Path:   "/",
+
+		MaxAge: 36000,
 	})
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusCreated, user)
 }
 
 // ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
@@ -102,19 +104,20 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 // @Description Log in using email and password
 // @Tags accounts
 // @Accept  json
-// @Param user body models.User true "User credentials"
+// @Param user body dto.LoginRequestDTO true "User credentials"
 // @Produce  json
-// @Success 200 {object} models.User
+// @Success 200 {object} dto.UserModelResponseDTO
 // @Failure 400 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
 // @Router /login [post]
 func (h *UserHandler) Login(c *gin.Context) {
 	ctx := c.Request.Context()
-	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	var req dto.LoginRequestDTO
+	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind user model: %s", err.Error())})
 		return
 	}
+	user := dto.LoginRequestDTOToUserModel(req)
 	log.Println("User attempted to log in: ", user)
 	_, err := h.repo.GetByMail(ctx, user.Email)
 	if err != nil {
@@ -132,12 +135,11 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     "XAuthorizationToken",
-		Value:    token,
-		SameSite: 4,
-		Domain:   "bytemehack.ru",
-		Path:     "/",
-		MaxAge:   36000,
+		Name:   "XAuthorizationToken",
+		Value:  token,
+		Domain: "bytemehack.ru",
+		Path:   "/",
+		MaxAge: 36000,
 	})
 	c.JSON(http.StatusOK, user)
 }
@@ -146,10 +148,10 @@ func (h *UserHandler) Login(c *gin.Context) {
 // @Summary Get general account info
 // @Tags accounts
 // @Accept  json
-// @Param Set-Cookie header string true "Authorization token cookie"
 // @Produce  json
-// @Success 200 {object} models.User
+// @Success 200 {object} dto.UserModelResponseDTO
 // @Failure 400 {object} ErrorMessage
+// @Failure 401 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
 // @Router /me [get]
 func (h *UserHandler) Me(c *gin.Context) {
@@ -169,8 +171,9 @@ func (h *UserHandler) Me(c *gin.Context) {
 // @Accept  json
 // @Param Set-Cookie header string true "Authorization token cookie"
 // @Produce  json
-// @Success 200 {object} models.User
+// @Success 200 {object} dto.UserModelResponseDTO
 // @Failure 400 {object} ErrorMessage
+// @Failure 401 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
 // @Router /users/:id [get]
 func (h *UserHandler) GetByID(c *gin.Context) {

@@ -4,12 +4,11 @@ build:
 run: swag build db
 	go run .
 
-docker.build: swag
+docker.build:
 	docker-compose build
 
 docker.up: docker.build
-	docker-compose start database
-	docker-compose start server
+	docker-compose up --build --remove-orphans
 
 docker.down:
 	docker-compose down 

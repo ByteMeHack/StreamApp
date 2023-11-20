@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "46.19.65.33:8080",
+    "host": "http://bytemehack.ru/api/",
     "basePath": "/",
     "paths": {
         "/login": {
@@ -76,15 +76,6 @@
                     "accounts"
                 ],
                 "summary": "Get general account info",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization token cookie",
-                        "name": "Set-Cookie",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -123,7 +114,7 @@
                     {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -165,9 +156,18 @@
                 "summary": "Create new room",
                 "parameters": [
                     {
+                        "description": "Room body",
+                        "name": "room",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Room"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -210,7 +210,7 @@
                     {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -251,7 +251,7 @@
                     {
                         "type": "string",
                         "description": "Authorization token",
-                        "name": "Authorization",
+                        "name": "Set-Cookie",
                         "in": "header",
                         "required": true
                     }
@@ -383,10 +383,10 @@
                 "contents": {
                     "type": "string"
                 },
-                "type": {
+                "message_type": {
                     "$ref": "#/definitions/models.MessageType"
                 },
-                "userId": {
+                "user_id": {
                     "type": "integer"
                 }
             }
