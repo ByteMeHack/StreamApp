@@ -18,3 +18,6 @@ db:
 
 swag:
 	swag init
+
+lint:
+	golangci-lint run
