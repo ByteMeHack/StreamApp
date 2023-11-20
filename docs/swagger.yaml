@@ -1,5 +1,30 @@
 basePath: /api
 definitions:
+  dto.LoginRequestDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.SignupRequestDTO:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.UserModelResponseDTO:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   handlers.ErrorMessage:
     properties:
       message:
@@ -85,14 +110,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/dto.LoginRequestDTO'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/dto.UserModelResponseDTO'
         "400":
           description: Bad Request
           schema:
@@ -114,9 +139,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/dto.UserModelResponseDTO'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
         "500":
@@ -255,14 +284,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/dto.SignupRequestDTO'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/dto.UserModelResponseDTO'
         "400":
           description: Bad Request
           schema:
@@ -290,9 +319,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/dto.UserModelResponseDTO'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
         "500":
