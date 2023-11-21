@@ -13,7 +13,8 @@ import (
 )
 
 type RoomHandler struct {
-	repo RoomRepository
+	repo     RoomRepository
+	userRepo UserRepository
 }
 
 func (h *RoomHandler) Register(e *gin.Engine) {
@@ -34,9 +35,10 @@ type RoomRepository interface {
 	LogIntoRoom(ctx context.Context, id, userId int64, password string) (models.Room, error)
 }
 
-func NewRoomHandler(repo RoomRepository) *RoomHandler {
+func NewRoomHandler(repo RoomRepository, userRepo UserRepository) *RoomHandler {
 	return &RoomHandler{
-		repo: repo,
+		repo:     repo,
+		userRepo: userRepo,
 	}
 }
 

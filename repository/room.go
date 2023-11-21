@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/folklinoff/hack_and_change/models"
 	"github.com/folklinoff/hack_and_change/pkg/hashing"
@@ -27,6 +28,14 @@ type Room struct {
 	Private        bool
 	HashedPassword string
 	Users          []User `gorm:"many2many:user_rooms"`
+}
+
+type UserRoom struct {
+	UserID      int64 `gorm:"primaryKey"`
+	RoomID      int64 `gorm:"primaryKey"`
+	CreatedTime time.Time
+	DeletedTime time.Time
+	Relation    string
 }
 
 func (u *RoomRepository) Save(ctx context.Context, Room models.Room) (models.Room, error) {
@@ -91,6 +100,21 @@ func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, pass
 	}
 	return room, nil
 }
+
+func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, relation string) error {
+	return u.db.
+		WithContext(ctx).
+		Where(&Room{ID: roomId}).
+		Association("Users").
+		Append(&UserRoom{UserID: userId, RoomID: roomId, Relation: relation, CreatedTime: time.Now()})
+}
+
+// func (u *RoomRepository) ChangeUserPermissions(ctx context.Context, roomId, userId int64) (models.Room, error) {
+// 	return u.db.
+// 		WithContext(ctx).
+// 		Where(&Room{ID: roomId}).
+// 		Association("Users").
+// }
 
 func RoomModelToEntity(r models.Room) (Room, error) {
 	hashedPassword, err := hashing.GeneratePasswordHash(r.Password)
