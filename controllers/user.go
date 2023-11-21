@@ -59,7 +59,7 @@ type LoginResponseDTO struct {
 // @Accept  json
 // @Param user body dto.SignupRequestDTO true "User credentials"
 // @Produce  json
-// @Success 200 {object} dto.UserModelResponseDTO
+// @Success 201 {object} dto.UserModelResponseDTO
 // @Failure 400 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
 // @Router /signup [post]

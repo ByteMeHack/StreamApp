@@ -182,7 +182,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
-      summary: Register for joining a room (not a websocket part)
+      summary: Get all rooms
       tags:
       - room
     post:
@@ -243,7 +243,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
-      summary: Register for joining a room (not a websocket part)
+      summary: Get room by id
       tags:
       - room
     post:

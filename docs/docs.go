@@ -121,7 +121,7 @@ const docTemplate = `{
                 "tags": [
                     "room"
                 ],
-                "summary": "Register for joining a room (not a websocket part)",
+                "summary": "Get all rooms",
                 "parameters": [
                     {
                         "type": "string",
@@ -217,7 +217,7 @@ const docTemplate = `{
                 "tags": [
                     "room"
                 ],
-                "summary": "Register for joining a room (not a websocket part)",
+                "summary": "Get room by id",
                 "parameters": [
                     {
                         "type": "string",

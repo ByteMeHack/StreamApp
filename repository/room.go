@@ -88,12 +88,21 @@ func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, pass
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
 	}
-	err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
+	if ent.Private {
+		err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
+		if err != nil {
+			return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
+		}
+	}
+
+	room := RoomEntityToModel(ent)
+	var user User
+	err = u.db.Model(&User{ID: userId}).First(user).Error
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
 	}
-	room := RoomEntityToModel(ent)
-	room.Users = append(room.Users, models.User{ID: userId})
+
+	room.Users = append(room.Users, userEntityToModel(user))
 	err = u.db.WithContext(ctx).Save(room).Error
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
