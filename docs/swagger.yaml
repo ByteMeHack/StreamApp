@@ -335,4 +335,38 @@ paths:
       summary: Get general account info
       tags:
       - accounts
+  /users/:id/rooms:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization token cookie
+        in: header
+        name: Set-Cookie
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Room'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
+      summary: Get user rooms
+      tags:
+      - accounts
 swagger: "2.0"

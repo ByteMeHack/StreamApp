@@ -205,7 +205,7 @@ func (h *UserHandler) GetByID(c *gin.Context) {
 // @Failure 400 {object} ErrorMessage
 // @Failure 401 {object} ErrorMessage
 // @Failure 500 {object} ErrorMessage
-// @Router /users/:id [get]
+// @Router /users/:id/rooms [get]
 func (h *UserHandler) GetUserRooms(c *gin.Context) {
 	ctx := c.Request.Context()
 	c.Request.ParseForm()
