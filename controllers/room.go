@@ -72,6 +72,12 @@ func (h *RoomHandler) Save(c *gin.Context) {
 		return
 	}
 	room.OwnerId = userId
+	user, err := h.userRepo.GetByID(ctx, userId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("failed to get user by id: %s", err.Error())})
+		return
+	}
+	room.Users = append(room.Users, user)
 	room, err = h.repo.Save(ctx, room)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("failed to create room: %s", err.Error())})
