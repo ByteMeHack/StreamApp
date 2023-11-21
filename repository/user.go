@@ -77,6 +77,16 @@ func (u *UserRepository) LoginUserByMail(ctx context.Context, mail string, passw
 	return user, nil
 }
 
+func (u *UserRepository) GetUserRooms(ctx context.Context, id int64) ([]models.Room, error) {
+	var roomEnts []Room
+	err := u.db.WithContext(ctx).Preload("Rooms").Where(&User{ID: id}).Find(&roomEnts).Error
+	if err != nil {
+		return []models.Room{}, fmt.Errorf("UserRepository::GetUserRooms: couldn't get user's rooms: %w", err)
+	}
+	rooms := RoomEntitiesToModels(roomEnts)
+	return rooms, nil
+}
+
 func userModelToEntity(u models.User) (User, error) {
 	hashedPassword, err := hashing.GeneratePasswordHash(u.Password)
 	log.Println("Hashed password: ", hashedPassword, u.Password)

@@ -30,7 +30,7 @@ func SignupRequestDTOToUserModel(req SignupRequestDTO) models.User {
 	return models.User{
 		Email:    req.Email,
 		Password: req.Password,
-		Name:     req.Password,
+		Name:     req.Name,
 	}
 }
 

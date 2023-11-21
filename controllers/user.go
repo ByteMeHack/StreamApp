@@ -35,6 +35,8 @@ func (u *UserHandler) Register(e *gin.Engine) {
 	root.GET("me", CheckAuthToken, u.Me)
 	root.OPTIONS("users/:id")
 	root.GET("users/:id", CheckAuthToken, u.GetByID)
+	root.OPTIONS("users/:id/rooms")
+	root.GET("users/:id/rooms", CheckAuthToken, u.GetUserRooms)
 }
 
 type UserRepository interface {
@@ -42,6 +44,7 @@ type UserRepository interface {
 	GetByMail(ctx context.Context, mail string) (models.User, error)
 	GetByID(ctx context.Context, id int64) (models.User, error)
 	LoginUserByMail(ctx context.Context, mail string, password string) (models.User, error)
+	GetUserRooms(ctx context.Context, id int64) ([]models.Room, error)
 }
 
 type LoginResponseDTO struct {
@@ -190,4 +193,31 @@ func (h *UserHandler) GetByID(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, user)
+}
+
+// ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
+// @Summary Get user rooms
+// @Tags accounts
+// @Accept  json
+// @Param Set-Cookie header string true "Authorization token cookie"
+// @Produce  json
+// @Success 200 {object} []models.Room
+// @Failure 400 {object} ErrorMessage
+// @Failure 401 {object} ErrorMessage
+// @Failure 500 {object} ErrorMessage
+// @Router /users/:id [get]
+func (h *UserHandler) GetUserRooms(c *gin.Context) {
+	ctx := c.Request.Context()
+	c.Request.ParseForm()
+	userId, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("wrong user id: %s", err.Error())})
+		return
+	}
+	rooms, err := h.repo.GetUserRooms(ctx, userId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("couldn't find user by mail: %s", err.Error())})
+		return
+	}
+	c.JSON(http.StatusOK, rooms)
 }
