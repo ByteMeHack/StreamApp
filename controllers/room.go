@@ -141,7 +141,7 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 func (h *RoomHandler) GetByID(c *gin.Context) {
 	ctx := c.Request.Context()
 	c.Request.ParseForm()
-	roomId, err := strconv.ParseInt(c.Request.FormValue("id"), 10, 64)
+	roomId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("bad url: room id is not an integer: %s", err.Error())})
 	}

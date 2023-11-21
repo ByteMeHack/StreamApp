@@ -179,7 +179,7 @@ func (h *UserHandler) Me(c *gin.Context) {
 func (h *UserHandler) GetByID(c *gin.Context) {
 	ctx := c.Request.Context()
 	c.Request.ParseForm()
-	userId, err := strconv.ParseInt(c.Request.FormValue("id"), 10, 64)
+	userId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("wrong user id: %s", err.Error())})
 		return
