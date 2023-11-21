@@ -79,7 +79,10 @@ func (u *UserRepository) LoginUserByMail(ctx context.Context, mail string, passw
 
 func (u *UserRepository) GetUserRooms(ctx context.Context, id int64) ([]models.Room, error) {
 	var roomEnts []Room
-	err := u.db.WithContext(ctx).Preload("Rooms").Where(&User{ID: id}).Find(&roomEnts).Error
+	err := u.db.WithContext(ctx).
+		Raw(`SELECT rooms.id, rooms.name, rooms.owner_id FROM rooms 
+			INNER JOIN user_rooms ON rooms.id = user_rooms.room_id
+			WHERE user_rooms.user_id = ?`, id).Scan(&roomEnts).Error
 	if err != nil {
 		return []models.Room{}, fmt.Errorf("UserRepository::GetUserRooms: couldn't get user's rooms: %w", err)
 	}
