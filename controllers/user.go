@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 
+	"github.com/folklinoff/hack_and_change/config"
 	"github.com/folklinoff/hack_and_change/dto"
 	"github.com/folklinoff/hack_and_change/models"
 	auth "github.com/folklinoff/hack_and_change/pkg/auth"
@@ -97,7 +97,7 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:   "XAuthorizationToken",
 		Value:  token,
-		Domain: strings.Split(c.Request.Host, ":")[0],
+		Domain: config.Cfg.Host,
 		Path:   "/",
 
 		MaxAge: 36000,
@@ -143,7 +143,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:   "XAuthorizationToken",
 		Value:  token,
-		Domain: strings.Split(c.Request.Host, ":")[0],
+		Domain: config.Cfg.Host,
 		Path:   "/",
 		MaxAge: 36000,
 	})
@@ -161,7 +161,7 @@ func (h *UserHandler) Logout(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:   "XAuthorizationToken",
 		Value:  "",
-		Domain: strings.Split(c.Request.Host, ":")[0],
+		Domain: config.Cfg.Host,
 		Path:   "/",
 		MaxAge: -1,
 	})
