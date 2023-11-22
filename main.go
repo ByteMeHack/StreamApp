@@ -41,12 +41,16 @@ func main() {
 		log.Fatalf("couldn't initialize database: %s", err.Error())
 	}
 
-	if err := db.AutoMigrate(&repository.Room{}, &repository.User{}); err != nil {
+	if err := db.AutoMigrate(&repository.Room{}, &repository.User{}, &repository.UserRoom{}); err != nil {
 		log.Fatalf("couldn't migrate into database: %s", err.Error())
 	}
 
-	if err := db.SetupJoinTable(&repository.Room{}, "UserRoom", &repository.User{}); err != nil {
-		log.Fatalf("couldn't migrate into database: %s", err.Error())
+	if err := db.SetupJoinTable(&repository.Room{}, "Users", &repository.UserRoom{}); err != nil {
+		log.Fatalf("couldn't setup join table for room: %s", err.Error())
+	}
+
+	if err := db.SetupJoinTable(&repository.User{}, "Rooms", &repository.UserRoom{}); err != nil {
+		log.Fatalf("couldn't setup join table for users: %s", err.Error())
 	}
 
 	e := gin.Default()
