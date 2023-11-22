@@ -99,6 +99,29 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /accounts/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              message:
+                type: string
+            type: object
+      summary: Logout from an account
+      tags:
+      - accounts
   /login:
     post:
       consumes:
@@ -178,6 +201,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
         "500":
           description: Internal Server Error
           schema:
@@ -203,12 +230,16 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/models.Room'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
         "500":
@@ -239,6 +270,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
         "500":
           description: Internal Server Error
           schema:
@@ -266,6 +301,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.ErrorMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorMessage'
         "500":
           description: Internal Server Error
           schema:
@@ -288,8 +327,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/dto.UserModelResponseDTO'
         "400":

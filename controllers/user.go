@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/folklinoff/hack_and_change/dto"
 	"github.com/folklinoff/hack_and_change/models"
@@ -96,7 +97,7 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:   "XAuthorizationToken",
 		Value:  token,
-		Domain: "bytemehack.ru",
+		Domain: strings.Split(c.Request.Host, ":")[0],
 		Path:   "/",
 
 		MaxAge: 36000,
@@ -142,7 +143,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:   "XAuthorizationToken",
 		Value:  token,
-		Domain: "bytemehack.ru",
+		Domain: strings.Split(c.Request.Host, ":")[0],
 		Path:   "/",
 		MaxAge: 36000,
 	})
@@ -154,15 +155,13 @@ func (h *UserHandler) Login(c *gin.Context) {
 // @Tags accounts
 // @Accept  json
 // @Produce  json
-// @Param id path string true "Account ID"
-// @Success 200 {object} {message: string}
-// @Failure 400 {object} model.HTTPError
+// @Success 200 {object} object{message=string}
 // @Router /accounts/{id} [get]
 func (h *UserHandler) Logout(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:   "XAuthorizationToken",
 		Value:  "",
-		Domain: "bytemehack.ru",
+		Domain: strings.Split(c.Request.Host, ":")[0],
 		Path:   "/",
 		MaxAge: -1,
 	})
