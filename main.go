@@ -45,6 +45,10 @@ func main() {
 		log.Fatalf("couldn't migrate into database: %s", err.Error())
 	}
 
+	if err := db.SetupJoinTable(&repository.Room{}, "UserRoom", &repository.User{}); err != nil {
+		log.Fatalf("couldn't migrate into database: %s", err.Error())
+	}
+
 	e := gin.Default()
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	e.GET("/", func(c *gin.Context) {

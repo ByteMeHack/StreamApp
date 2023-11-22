@@ -27,7 +27,7 @@ type Room struct {
 	OwnerId        int64
 	Private        bool
 	HashedPassword string
-	Users          []User `gorm:"many2many:user_rooms"`
+	Users          []User `gorm:"many2many:user_rooms,foreignKey=ID"`
 }
 
 type UserRoom struct {

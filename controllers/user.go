@@ -31,6 +31,8 @@ func (u *UserHandler) Register(e *gin.Engine) {
 	root.POST("signup", u.SignUp)
 	root.OPTIONS("login")
 	root.POST("login", u.Login)
+	root.OPTIONS("logout")
+	root.POST("logout", u.Logout)
 	root.OPTIONS("me")
 	root.GET("me", CheckAuthToken, u.Me)
 	root.OPTIONS("users/:id")
@@ -145,6 +147,26 @@ func (h *UserHandler) Login(c *gin.Context) {
 		MaxAge: 36000,
 	})
 	c.JSON(http.StatusOK, user)
+}
+
+// ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
+// @Summary Logout from an account
+// @Tags accounts
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Account ID"
+// @Success 200 {object} {message: string}
+// @Failure 400 {object} model.HTTPError
+// @Router /accounts/{id} [get]
+func (h *UserHandler) Logout(c *gin.Context) {
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:   "XAuthorizationToken",
+		Value:  "",
+		Domain: "bytemehack.ru",
+		Path:   "/",
+		MaxAge: -1,
+	})
+	c.JSON(http.StatusOK, gin.H{"message": "logged out"})
 }
 
 // ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
