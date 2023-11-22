@@ -21,3 +21,6 @@ swag:
 
 lint:
 	golangci-lint run
+
+open_db:
+	docker exec -it byte_me psql -U postgres byteme
