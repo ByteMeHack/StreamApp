@@ -36,15 +36,6 @@ const docTemplate = `{
                     "accounts"
                 ],
                 "summary": "Logout from an account",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Account ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",

@@ -103,12 +103,6 @@ paths:
     get:
       consumes:
       - application/json
-      parameters:
-      - description: Account ID
-        in: path
-        name: id
-        required: true
-        type: string
       produces:
       - application/json
       responses:

@@ -158,7 +158,7 @@ func RoomEntityToModel(r Room) models.Room {
 func RoomEntitiesToModels(r []Room) []models.Room {
 	models := make([]models.Room, len(r))
 	for i := range r {
-		models = append(models, RoomEntityToModel(r[i]))
+		models[i] = RoomEntityToModel(r[i])
 	}
 	return models
 }
