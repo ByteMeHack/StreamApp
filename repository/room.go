@@ -97,7 +97,7 @@ func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, pass
 
 	room := RoomEntityToModel(ent)
 	var user User
-	err = u.db.Model(&User{ID: userId}).First(user).Error
+	err = u.db.Model(&User{ID: userId}).First(&user).Error
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
 	}
