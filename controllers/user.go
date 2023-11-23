@@ -156,7 +156,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} object{message=string}
-// @Router /accounts/{id} [get]
+// @Router /logout [post]
 func (h *UserHandler) Logout(c *gin.Context) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:   "XAuthorizationToken",
