@@ -3,7 +3,6 @@ import RoomCard from "./RoomCard";
 import ModalCreateRoom from "./ModalCreateRoom";
 import { useSelector } from "react-redux";
 import { roomsSelector, userSelector } from "../store/selectors";
-import { useState } from "react";
 
 export default function RoomsStack() {
   const user = useSelector(userSelector);
@@ -25,19 +24,23 @@ export default function RoomsStack() {
       {user ? (
         <>
           <ModalCreateRoom />
-          <Stack placeItems="center" mb={5}>
-            <Stack
-              direction="row"
-              flexWrap="wrap"
-              w="95%"
-              gap={5}
-              justifyContent="center"
-            >
-              {allRooms.map((room) => {
-                return <RoomCard key={room.id} id={room.id} name={room.name} />;
-              })}
+          {allRooms && (
+            <Stack placeItems="center" mb={5}>
+              <Stack
+                direction="row"
+                flexWrap="wrap"
+                w="95%"
+                gap={5}
+                justifyContent="center"
+              >
+                {allRooms.map((room) => {
+                  return (
+                    <RoomCard key={room.id} id={room.id} name={room.name} />
+                  );
+                })}
+              </Stack>
             </Stack>
-          </Stack>
+          )}
         </>
       ) : (
         <Box textAlign="center" className="grayBlock">
