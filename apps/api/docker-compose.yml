@@ -1,0 +1,29 @@
+services:
+  database:
+    image: postgres:latest
+    hostname: ${POSTGRES_HOST}
+    container_name: byte_me 
+    networks: 
+      - net
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_PORT}:5432
+  server:
+    image: server  
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server
+    networks: 
+      - net
+    restart: always
+    env_file:
+      - .env
+    depends_on: 
+      - database
+    ports:
+      - 8080:${PORT} 
+
+networks:
+  net:
