@@ -58,12 +58,12 @@ export default function RoomsStack() {
         {buttons.map((button, index) => {
           return (
             <Button
-              key={index}
+              key={button}
               onClick={() => {
-                setButton(index+1);
+                setButton(button);
               }}
             >
-              {index+1}
+              {button}
             </Button>
           );
         })}
