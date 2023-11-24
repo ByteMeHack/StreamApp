@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -67,8 +66,8 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind user model: %s", err.Error())})
 		return
 	}
-	user := dto.SignupRequestDTOToUserModel(req)
-	_, err := h.repo.GetByMail(ctx, user.Email)
+
+	_, err := h.repo.GetByMail(ctx, req.Email)
 	innerErr := errors.Unwrap(err)
 	switch {
 	case err == nil:
@@ -78,6 +77,7 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get data about user: %s", innerErr.Error())})
 		return
 	}
+	user := dto.SignupRequestDTOToUserModel(req)
 	user, err = h.repo.Save(ctx, user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("couldn't create user: %s", err.Error())})
@@ -119,7 +119,6 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 	user := dto.LoginRequestDTOToUserModel(req)
-	log.Println("User attempted to log in: ", user)
 	_, err := h.repo.GetByMail(ctx, user.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("couldn't find user by mail: %s", err.Error())})
