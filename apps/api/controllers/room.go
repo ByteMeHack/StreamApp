@@ -75,7 +75,9 @@ func (h *RoomHandler) Save(c *gin.Context) {
 	}
 	room = dto.CreateRoomRequestDTOToModel(req)
 	room.OwnerId = userId
+	log.Printf("user with id: %d attempting to create room with name %s", userId, room.Name)
 	user, err := h.userRepo.GetByID(ctx, userId)
+	log.Printf("user with id: %d retrieved from database", user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("failed to get user by id: %s", err.Error())})
 		return
