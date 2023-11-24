@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -108,8 +109,8 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("bad url: room id is not an integer: %s", err.Error())})
 		return
 	}
-
 	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
+	log.Printf("user with id: %d attempting to join room with id %d", userId, roomId)
 	repoRoom, err := h.repo.GetByID(ctx, roomId)
 	if repoRoom.OwnerId == userId {
 		c.JSON(http.StatusOK, repoRoom)
@@ -140,6 +141,7 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, room)
 	} else {
+
 		room, err := h.repo.AddUser(ctx, roomId, userId, "regular")
 		if err != nil {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
