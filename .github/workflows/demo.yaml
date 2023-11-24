@@ -23,9 +23,9 @@ jobs:
     steps:
       - name: publish
         uses: actions/checkout@v4
-      - run: docker build -t $DOCKER_TAG_LATEST .
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - run: docker push $DOCKER_TAG_LATEST
+      - run: docker build -t $DOCKER_BACKEND_TAG_LATEST .
+      - run: docker login -u $DOCKER_BACKEND_USERNAME -p $DOCKER_BACKEND_PASSWORD
+      - run: docker push $DOCKER_BACKEND_TAG_LATEST
   deployment:
     needs: [publish]
     runs-on: ubuntu-latest
@@ -40,8 +40,8 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
       - name: deploy
         uses: actions/checkout@v4
-      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $DOCKER_TAG_LATEST"
+      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_BACKEND_USERNAME -p $DOCKER_BACKEND_PASSWORD"
+      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $DOCKER_BACKEND_TAG_LATEST"
       - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/hack && docker-compose down || true"
       - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/hack && docker-compose up -d"
       - run: rm -f ~/.ssh/id_rsa
