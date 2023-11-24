@@ -12,7 +12,7 @@ export default function RoomsStack() {
   const [rooms, setRooms] = useState([]);
   let buttons = [],
     index = 1;
-  for (let i = 0; i < allRooms.length; i + 6) {
+  for (let i = 0; i < allRooms.length; i += 6) {
     buttons.push(index);
     index++;
   }
