@@ -11,7 +11,7 @@ export default function RoomsStack() {
   const allRooms = useSelector(roomsSelector);
   let buttons = [],
     index = 1;
-  for (let i = 0; i < allRooms.length + 6; i += 6) {
+  for (let i = 0; i <= allRooms.length; i += 6) {
     buttons.push(index);
     index++;
   }
