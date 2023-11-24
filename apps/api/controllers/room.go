@@ -166,27 +166,23 @@ func (h *RoomHandler) GetByID(c *gin.Context) {
 	}
 	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
 
-	room, err := h.repo.GetByID(ctx, roomId)
+	repoRoom, err := h.repo.GetByID(ctx, roomId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
 		return
 	}
-
-	if room.Private {
-		if room.OwnerId == userId {
-			c.JSON(http.StatusOK, room)
-			return
-		}
-		for i := range room.Users {
-			if room.Users[i].ID == userId {
-				c.JSON(http.StatusOK, room)
-				return
-			}
-		}
-		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("user is not part of a room: %s", err.Error())})
+	if repoRoom.OwnerId == userId {
+		c.JSON(http.StatusOK, repoRoom)
 		return
 	}
-	c.JSON(http.StatusOK, room)
+	for i := range repoRoom.Users {
+		if repoRoom.Users[i].ID == userId {
+			c.JSON(http.StatusOK, repoRoom)
+			return
+		}
+	}
+
+	c.JSON(http.StatusBadRequest, ErrorMessage{Message: "you are not a member of this room"})
 }
 
 // ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
