@@ -8,10 +8,7 @@ import { useState } from "react";
 export default function RoomsStack() {
   const user = useSelector(userSelector);
   const [button, setButton] = useState(1);
-  const allRooms = useSelector(roomsSelector).slice(
-    (button - 1) * 6,
-    button * 6
-  );
+  const allRooms = useSelector(roomsSelector);
   let buttons = [],
     index = 1;
   for (let i = 0; i < allRooms.length + 6; i += 6) {
@@ -32,7 +29,7 @@ export default function RoomsStack() {
               gap={5}
               justifyContent="center"
             >
-              {allRooms.map((room) => {
+              {allRooms.slice((button - 1) * 6, button * 6).map((room) => {
                 return <RoomCard key={room.id} id={room.id} name={room.name} />;
               })}
             </Stack>
