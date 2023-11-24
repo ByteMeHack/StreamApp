@@ -10,9 +10,9 @@ on:
       - backend
 
 env:
-  DOCKER_TAG_LATEST: ${{ secrets.DOCKER_BACKEND_TAG_LATEST }}
-  DOCKER_USERNAME: ${{ secrets.DOCKER_BACKEND_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_BACKEND_PASSWORD }}
+  DOCKER_BACKEND_TAG_LATEST: ${{ secrets.DOCKER_BACKEND_TAG_LATEST }}
+  DOCKER_BACKEND_USERNAME: ${{ secrets.DOCKER_BACKEND_USERNAME }}
+  DOCKER_BACKEND_PASSWORD: ${{ secrets.DOCKER_BACKEND_PASSWORD }}
   ID_RSA: ${{ secrets.ID_RSA }}
   SERVER_USER: ${{ secrets.SERVER_USER }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: publish
         uses: actions/checkout@v4
-      - run: docker build -t $DOCKER_BACKEND_TAG_LATEST .
+      - run: cd apps/api && docker build -t $DOCKER_BACKEND_TAG_LATEST .
       - run: docker login -u $DOCKER_BACKEND_USERNAME -p $DOCKER_BACKEND_PASSWORD
       - run: docker push $DOCKER_BACKEND_TAG_LATEST
   deployment:
