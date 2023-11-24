@@ -8,6 +8,7 @@ export default function RoomsStack() {
   const user = useSelector(userSelector);
   // const [button, setButton] = useState(1);
   const allRooms = useSelector(roomsSelector);
+  console.log(allRooms);
   // .slice(
   //   (button - 1) * 6,
   //   button * 6
@@ -24,23 +25,19 @@ export default function RoomsStack() {
       {user ? (
         <>
           <ModalCreateRoom />
-          {allRooms && (
-            <Stack placeItems="center" mb={5}>
-              <Stack
-                direction="row"
-                flexWrap="wrap"
-                w="95%"
-                gap={5}
-                justifyContent="center"
-              >
-                {allRooms.map((room) => {
-                  return (
-                    <RoomCard key={room.id} id={room.id} name={room.name} />
-                  );
-                })}
-              </Stack>
+          <Stack placeItems="center" mb={5}>
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              w="95%"
+              gap={5}
+              justifyContent="center"
+            >
+              {allRooms.map((room) => {
+                return <RoomCard key={room.id} id={room.id} name={room.name} />;
+              })}
             </Stack>
-          )}
+          </Stack>
         </>
       ) : (
         <Box textAlign="center" className="grayBlock">
