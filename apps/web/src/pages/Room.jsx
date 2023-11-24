@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getRoomById } from "../api";
 
 export default function Room() {
-  const { id } = useParams().id;
+  const id = useParams().id;
   const [room, setRoom] = useState(null);
   useEffect(() => {
     getRoomById(id).then((res) => setRoom(res));
