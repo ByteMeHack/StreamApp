@@ -7,10 +7,10 @@ import { useState } from "react";
 
 export default function RoomsStack() {
   const user = useSelector(userSelector);
+  const [button, setButton] = useState(1);
   const allRooms = useSelector((state) => {
     return roomsSelector(state).slice((button - 1) * 6, button * 6);
   });
-  const [button, setButton] = useState(1);
   let buttons = [],
     index = 1;
   for (let i = 0; i < allRooms.length; i += 6) {
