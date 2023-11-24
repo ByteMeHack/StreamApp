@@ -96,16 +96,22 @@ func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, pass
 	}
 
 	var user User
-	err = u.db.Model(&User{ID: userId}).First(&user).Error
+	err = u.db.Model(&User{}).Where("id = ?", userId).First(&user).Error
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
 	}
-	log.Printf("User %+v attempting to join a room ", user)
-	err = u.db.Model(&ent).Association("Users").Append(&user)
-	// err = u.db.WithContext(ctx).Save(&room).Error
+	err = u.db.Raw(`INSERT INTO user_rooms (user_id, room_id, created_time, relation) 
+		VALUES (?, ?, ?, ?) ON CONFLICT (user_id, room_id) 
+		DO UPDATE SET deleted_time = NULL`,
+		userId, id, time.Now(), "member").Error
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
 	}
+	err = u.db.Model(&ent).Where("id = ?", id).First(&ent).Error
+	if err != nil {
+		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
+	}
+
 	room := RoomEntityToModel(ent)
 	return room, nil
 }

@@ -71,6 +71,7 @@ func (h *RoomHandler) Save(c *gin.Context) {
 		return
 	}
 	room.OwnerId = userId
+
 	user, err := h.userRepo.GetByID(ctx, userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("failed to get user by id: %s", err.Error())})
@@ -98,40 +99,44 @@ func (h *RoomHandler) Save(c *gin.Context) {
 // @Router /rooms/:id [POST]
 func (h *RoomHandler) JoinRoom(c *gin.Context) {
 	ctx := c.Request.Context()
+
 	roomId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("bad url: room id is not an integer: %s", err.Error())})
 	}
+
 	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
 	repoRoom, err := h.repo.GetByID(ctx, roomId)
-	var room models.Room
 	if repoRoom.Private {
+		var room models.Room
 		if err := c.ShouldBindJSON(&room); err != nil {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind room: %s", err.Error())})
 			return
 		}
-	}
-	enteredPassword := room.Password
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
-		return
-	}
-	if room.OwnerId == userId {
-		c.JSON(http.StatusOK, room)
-		return
-	}
-	for i := range room.Users {
-		if room.Users[i].ID == userId {
+
+		if room.OwnerId == userId {
 			c.JSON(http.StatusOK, room)
 			return
 		}
+		for i := range room.Users {
+			if room.Users[i].ID == userId {
+				c.JSON(http.StatusOK, room)
+				return
+			}
+		}
+
+		enteredPassword := room.Password
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
+			return
+		}
+		room, err = h.repo.LogIntoRoom(ctx, roomId, userId, enteredPassword)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
+			return
+		}
 	}
-	room, err = h.repo.LogIntoRoom(ctx, roomId, userId, enteredPassword)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
-		return
-	}
-	c.JSON(http.StatusOK, room)
+	c.JSON(http.StatusOK, repoRoom)
 }
 
 // ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
@@ -147,38 +152,32 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 // @Router /rooms/:id [get]
 func (h *RoomHandler) GetByID(c *gin.Context) {
 	ctx := c.Request.Context()
-	c.Request.ParseForm()
 	roomId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("bad url: room id is not an integer: %s", err.Error())})
-	}
-	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
-	var room models.Room
-	if err := c.ShouldBindJSON(&room); err != nil {
-		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind room: %s", err.Error())})
 		return
 	}
-	room, err = h.repo.GetByID(ctx, roomId)
+	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
+
+	room, err := h.repo.GetByID(ctx, roomId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
 		return
 	}
-	if room.OwnerId == userId {
-		c.JSON(http.StatusOK, room)
-		return
-	}
-	for i := range room.Users {
-		if room.Users[i].ID == userId {
+
+	if room.Private {
+		if room.OwnerId == userId {
 			c.JSON(http.StatusOK, room)
 			return
 		}
-	}
-	if room.Private {
-		room, err = h.repo.LogIntoRoom(ctx, roomId, userId, room.Password)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
-			return
+		for i := range room.Users {
+			if room.Users[i].ID == userId {
+				c.JSON(http.StatusOK, room)
+				return
+			}
 		}
+		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("user is not part of a room: %s", err.Error())})
+		return
 	}
 	c.JSON(http.StatusOK, room)
 }

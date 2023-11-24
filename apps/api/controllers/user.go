@@ -83,6 +83,7 @@ func (h *UserHandler) SignUp(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("couldn't create user: %s", err.Error())})
 		return
 	}
+
 	token, err := auth.CreateToken(user.ID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("couldn't create token: %s", err.Error())})

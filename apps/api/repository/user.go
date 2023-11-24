@@ -54,7 +54,7 @@ func (u *UserRepository) GetByMail(ctx context.Context, mail string) (models.Use
 
 func (u *UserRepository) GetByID(ctx context.Context, id int64) (models.User, error) {
 	var ent User
-	err := u.db.WithContext(ctx).Where(&User{ID: id}).First(&ent).Error
+	err := u.db.WithContext(ctx).Where("id = ?", id).First(&ent).Error
 	if err != nil {
 		return models.User{}, fmt.Errorf("UserRepository::GetByID: couldn't get user id: %w", err)
 	}
