@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
       - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "docker login -u $DOCKER_BACKEND_USERNAME -p $DOCKER_BACKEND_PASSWORD"
       - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "docker pull $DOCKER_BACKEND_TAG_LATEST"
-      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "cd ~/hack && docker-compose down || true"
+      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "cd ~/hack && docker-compose stop || true"
       - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "cd ~/hack && docker-compose up -d"
       - run: rm -f ~/.ssh/id_rsa
       - run: echo "This job's status is ${{ job.status }}."

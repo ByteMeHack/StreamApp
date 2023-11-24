@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -47,6 +48,8 @@ func CheckAuthToken(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	log.Println(token)
+	log.Println("User id: ", id)
 	c.Request.Header.Add("XUserID", strconv.FormatInt(id, 10))
 }
 
