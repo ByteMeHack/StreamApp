@@ -34,23 +34,6 @@ export default function RoomsStack() {
               })}
             </Stack>
           </Stack>
-        </>
-      ) : (
-        <>
-          <Box textAlign="center" className="grayBlock">
-            <Heading
-              display="inline-block"
-              as="h2"
-              size="2xl"
-              bgGradient="linear(to-r, green.400, green.600)"
-              backgroundClip="text"
-            >
-              Unauthorised
-            </Heading>
-            <Text fontSize="18px" color={"gray.500"} mt={4}>
-              Login or Register to continue
-            </Text>
-          </Box>
           <Stack direction="row" spacing={5}>
             {buttons.map((button, index) => {
               return (
@@ -66,6 +49,21 @@ export default function RoomsStack() {
             })}
           </Stack>
         </>
+      ) : (
+        <Box textAlign="center" className="grayBlock">
+          <Heading
+            display="inline-block"
+            as="h2"
+            size="2xl"
+            bgGradient="linear(to-r, green.400, green.600)"
+            backgroundClip="text"
+          >
+            Unauthorised
+          </Heading>
+          <Text fontSize="18px" color={"gray.500"} mt={4}>
+            Login or Register to continue
+          </Text>
+        </Box>
       )}
     </Stack>
   );
