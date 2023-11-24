@@ -14,7 +14,7 @@ env:
   DOCKER_FRONTEND_USERNAME: ${{ secrets.DOCKER_FRONTEND_USERNAME }}
   DOCKER_FRONTEND_PASSWORD: ${{ secrets.DOCKER_FRONTEND_PASSWORD }}
   ID_RSA: ${{ secrets.ID_RSA }}
-  SERVER_USER: ${{ secrets.SERVER_USER }}
+  SERVER_USER: ${{ secrets.SERVER_USERNAME }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
 
 jobs:
