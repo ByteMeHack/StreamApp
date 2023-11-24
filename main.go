@@ -59,7 +59,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "We gucci"})
 	})
 	e.GET("/room/:id", handlers.CORSMiddleware(), handlers.CheckAuthToken, ws.ConnectToRoom)
-
+	e.Use(handlers.CORSMiddleware())
 	userHandler := composites.NewUserComposite(db)
 	userHandler.Register(e)
 	roomHandler := composites.NewRoomComposite(db)

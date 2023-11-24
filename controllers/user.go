@@ -28,17 +28,11 @@ func NewUserHandler(repo UserRepository) *UserHandler {
 
 func (u *UserHandler) Register(e *gin.Engine) {
 	root := e.Group("/", CORSMiddleware())
-	root.OPTIONS("signup")
 	root.POST("signup", u.SignUp)
-	root.OPTIONS("login")
 	root.POST("login", u.Login)
-	root.OPTIONS("logout")
 	root.POST("logout", u.Logout)
-	root.OPTIONS("me")
 	root.GET("me", CheckAuthToken, u.Me)
-	root.OPTIONS("users/:id")
 	root.GET("users/:id", CheckAuthToken, u.GetByID)
-	root.OPTIONS("users/:id/rooms")
 	root.GET("users/:id/rooms", CheckAuthToken, u.GetUserRooms)
 }
 
