@@ -31,7 +31,7 @@ type RoomRepository interface {
 	Save(ctx context.Context, room models.Room) (models.Room, error)
 	GetByName(ctx context.Context, name string) (models.Room, error)
 	GetByID(ctx context.Context, id int64) (models.Room, error)
-	Get(ctx context.Context) ([]models.Room, error)
+	Get(ctx context.Context, name string) ([]models.Room, error)
 	AddUser(ctx context.Context, roomId, userId int64, relation string) (models.Room, error)
 	LogIntoRoom(ctx context.Context, id, userId int64, password string) (models.Room, error)
 }
@@ -205,7 +205,8 @@ func (h *RoomHandler) GetByID(c *gin.Context) {
 // @Router /rooms [get]
 func (h *RoomHandler) Get(c *gin.Context) {
 	ctx := c.Request.Context()
-	rooms, err := h.repo.Get(ctx)
+	name := c.Query("name")
+	rooms, err := h.repo.Get(ctx, name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get all rooms: %s", err.Error())})
 		return

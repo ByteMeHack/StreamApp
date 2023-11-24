@@ -72,9 +72,9 @@ func (u *RoomRepository) GetByID(ctx context.Context, id int64) (models.Room, er
 	return room, nil
 }
 
-func (u *RoomRepository) Get(ctx context.Context) ([]models.Room, error) {
+func (u *RoomRepository) Get(ctx context.Context, name string) ([]models.Room, error) {
 	var ents []Room
-	err := u.db.WithContext(ctx).Model(&Room{}).Preload("Users").Find(&ents).Error
+	err := u.db.WithContext(ctx).Model(&Room{}).Preload("Users").Where("name LIKE %?%", name).Find(&ents).Error
 	if err != nil {
 		return []models.Room{}, fmt.Errorf("RoomRepository::Get: couldn't get all rooms: %w", err)
 	}
