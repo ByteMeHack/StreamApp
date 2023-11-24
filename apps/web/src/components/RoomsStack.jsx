@@ -11,7 +11,7 @@ export default function RoomsStack() {
   const allRooms = useSelector(roomsSelector);
   let buttons = [],
     index = 1;
-  for (let i = 0; i <= allRooms.length; i += 6) {
+  for (let i = 0; i <= allRooms.length + 1; i += 6) {
     buttons.push(index);
     index++;
   }
@@ -36,35 +36,37 @@ export default function RoomsStack() {
           </Stack>
         </>
       ) : (
-        <Box textAlign="center" className="grayBlock">
-          <Heading
-            display="inline-block"
-            as="h2"
-            size="2xl"
-            bgGradient="linear(to-r, green.400, green.600)"
-            backgroundClip="text"
-          >
-            Unauthorised
-          </Heading>
-          <Text fontSize="18px" color={"gray.500"} mt={4}>
-            Login or Register to continue
-          </Text>
-        </Box>
-      )}
-      <Stack direction="row" spacing={5}>
-        {buttons.map((button, index) => {
-          return (
-            <Button
-              key={button}
-              onClick={() => {
-                setButton(button);
-              }}
+        <>
+          <Box textAlign="center" className="grayBlock">
+            <Heading
+              display="inline-block"
+              as="h2"
+              size="2xl"
+              bgGradient="linear(to-r, green.400, green.600)"
+              backgroundClip="text"
             >
-              {button}
-            </Button>
-          );
-        })}
-      </Stack>
+              Unauthorised
+            </Heading>
+            <Text fontSize="18px" color={"gray.500"} mt={4}>
+              Login or Register to continue
+            </Text>
+          </Box>
+          <Stack direction="row" spacing={5}>
+            {buttons.map((button, index) => {
+              return (
+                <Button
+                  key={button}
+                  onClick={() => {
+                    setButton(button);
+                  }}
+                >
+                  {button}
+                </Button>
+              );
+            })}
+          </Stack>
+        </>
+      )}
     </Stack>
   );
 }
