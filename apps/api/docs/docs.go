@@ -206,7 +206,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Room"
+                            "$ref": "#/definitions/dto.CreateRoomRequestDTO"
                         }
                     },
                     {
@@ -311,6 +311,14 @@ const docTemplate = `{
                         "name": "Set-Cookie",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "description": "Room with password",
+                        "name": "password",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/dto.JoinRoomRequestDTO"
+                        }
                     }
                 ],
                 "responses": {
@@ -490,6 +498,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.CreateRoomRequestDTO": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "private": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "dto.JoinRoomRequestDTO": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.LoginRequestDTO": {
             "type": "object",
             "properties": {

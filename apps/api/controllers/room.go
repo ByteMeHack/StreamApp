@@ -47,7 +47,7 @@ func NewRoomHandler(repo RoomRepository, userRepo UserRepository) *RoomHandler {
 // @Tags room
 // @Accept  json
 // @Produce  json
-// @Param room body models.Room true "Room body"
+// @Param room body dto.CreateRoomRequestDTO true "Room body"
 // @Param Set-Cookie header string true "Authorization token"
 // @Success 201 {object} models.Room
 // @Failure 400 {object} ErrorMessage
@@ -57,12 +57,12 @@ func NewRoomHandler(repo RoomRepository, userRepo UserRepository) *RoomHandler {
 func (h *RoomHandler) Save(c *gin.Context) {
 	ctx := c.Request.Context()
 	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
-	var room models.Room
-	if err := c.ShouldBindJSON(&room); err != nil {
+	var req dto.CreateRoomRequestDTO
+	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind room: %s", err.Error())})
 		return
 	}
-	_, err := h.repo.GetByName(ctx, room.Name)
+	room, err := h.repo.GetByName(ctx, req.Name)
 	innerErr := errors.Unwrap(err)
 	switch {
 	case err == nil:
