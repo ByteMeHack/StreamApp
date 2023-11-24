@@ -116,12 +116,19 @@ func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, pass
 	return room, nil
 }
 
-func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, relation string) error {
-	return u.db.
-		WithContext(ctx).
-		Where(&Room{ID: roomId}).
-		Association("Users").
-		Append(&UserRoom{UserID: userId, RoomID: roomId, Relation: relation, CreatedTime: time.Now()})
+func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, relation string) (models.Room, error) {
+	err := u.db.Raw(`INSERT INTO user_rooms (user_id, room_id, created_time, relation) 
+		VALUES (?, ?, ?, ?) ON CONFLICT (user_id, room_id) 
+		DO UPDATE SET deleted_time = NULL`,
+		userId, roomId, time.Now(), "member").Error
+	if err != nil {
+		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
+	}
+	room, err := u.GetByID(ctx, roomId)
+	if err != nil {
+		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
+	}
+	return room, nil
 }
 
 // func (u *RoomRepository) ChangeUserPermissions(ctx context.Context, roomId, userId int64) (models.Room, error) {

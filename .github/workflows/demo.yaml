@@ -14,7 +14,7 @@ env:
   DOCKER_BACKEND_USERNAME: ${{ secrets.DOCKER_BACKEND_USERNAME }}
   DOCKER_BACKEND_PASSWORD: ${{ secrets.DOCKER_BACKEND_PASSWORD }}
   ID_RSA: ${{ secrets.ID_RSA }}
-  SERVER_USER: ${{ secrets.SERVER_USERNAME }}
+  SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
 
 jobs:
@@ -40,9 +40,9 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
       - name: deploy
         uses: actions/checkout@v4
-      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u $DOCKER_BACKEND_USERNAME -p $DOCKER_BACKEND_PASSWORD"
-      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $DOCKER_BACKEND_TAG_LATEST"
-      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/hack && docker-compose down || true"
-      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd ~/hack && docker-compose up -d"
+      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "docker login -u $DOCKER_BACKEND_USERNAME -p $DOCKER_BACKEND_PASSWORD"
+      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "docker pull $DOCKER_BACKEND_TAG_LATEST"
+      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "cd ~/hack && docker-compose down || true"
+      - run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP "cd ~/hack && docker-compose up -d"
       - run: rm -f ~/.ssh/id_rsa
       - run: echo "This job's status is ${{ job.status }}."

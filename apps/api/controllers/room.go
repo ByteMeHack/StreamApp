@@ -30,6 +30,7 @@ type RoomRepository interface {
 	GetByName(ctx context.Context, name string) (models.Room, error)
 	GetByID(ctx context.Context, id int64) (models.Room, error)
 	Get(ctx context.Context) ([]models.Room, error)
+	AddUser(ctx context.Context, roomId, userId int64, relation string) (models.Room, error)
 	LogIntoRoom(ctx context.Context, id, userId int64, password string) (models.Room, error)
 }
 
@@ -107,22 +108,21 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 
 	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
 	repoRoom, err := h.repo.GetByID(ctx, roomId)
+	if repoRoom.OwnerId == userId {
+		c.JSON(http.StatusOK, repoRoom)
+		return
+	}
+	for i := range repoRoom.Users {
+		if repoRoom.Users[i].ID == userId {
+			c.JSON(http.StatusOK, repoRoom)
+			return
+		}
+	}
 	if repoRoom.Private {
 		var room models.Room
 		if err := c.ShouldBindJSON(&room); err != nil {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind room: %s", err.Error())})
 			return
-		}
-
-		if room.OwnerId == userId {
-			c.JSON(http.StatusOK, room)
-			return
-		}
-		for i := range room.Users {
-			if room.Users[i].ID == userId {
-				c.JSON(http.StatusOK, room)
-				return
-			}
 		}
 
 		enteredPassword := room.Password
@@ -135,8 +135,15 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
 			return
 		}
+		c.JSON(http.StatusOK, room)
+	} else {
+		room, err := h.repo.AddUser(ctx, roomId, userId, "regular")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
+			return
+		}
+		c.JSON(http.StatusOK, room)
 	}
-	c.JSON(http.StatusOK, repoRoom)
 }
 
 // ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
