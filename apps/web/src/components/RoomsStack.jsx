@@ -31,7 +31,7 @@ export default function RoomsStack() {
               gap={5}
               justifyContent="center"
             >
-              {rooms.map((room) => {
+              {allRooms.map((room) => {
                 return <RoomCard key={room.id} id={room.id} name={room.name} />;
               })}
             </Stack>
