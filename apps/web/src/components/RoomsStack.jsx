@@ -7,17 +7,18 @@ import { useState } from "react";
 
 export default function RoomsStack() {
   const user = useSelector(userSelector);
-  const [button, setButton] = useState(1);
-  const allRooms = useSelector(roomsSelector).slice(
-    (button - 1) * 6,
-    button * 6
-  );
-  let buttons = [],
-    index = 1;
-  for (let i = 0; i < allRooms.length; i += 6) {
-    buttons.push(index);
-    index++;
-  }
+  // const [button, setButton] = useState(1);
+  const allRooms = useSelector(roomsSelector);
+  // .slice(
+  //   (button - 1) * 6,
+  //   button * 6
+  // );
+  // let buttons = [],
+  //   index = 1;
+  // for (let i = 0; i < allRooms.length; i += 6) {
+  //   buttons.push(index);
+  //   index++;
+  // }
 
   return (
     <Stack className="grayBlock" placeItems="center" spacing={15}>
@@ -54,7 +55,7 @@ export default function RoomsStack() {
           </Text>
         </Box>
       )}
-      <Stack direction="row" spacing={5}>
+      {/* <Stack direction="row" spacing={5}>
         {buttons.map((button, index) => {
           return (
             <Button
@@ -67,7 +68,7 @@ export default function RoomsStack() {
             </Button>
           );
         })}
-      </Stack>
+      </Stack> */}
     </Stack>
   );
 }
