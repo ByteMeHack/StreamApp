@@ -3,6 +3,7 @@ import RoomCard from "./RoomCard";
 import ModalCreateRoom from "./ModalCreateRoom";
 import { useSelector } from "react-redux";
 import { roomsSelector, userSelector } from "../store/selectors";
+import { useState } from "react";
 
 export default function RoomsStack() {
   const user = useSelector(userSelector);
