@@ -73,8 +73,8 @@ export default function ModalCreateRoom() {
                   .then(() => {
                     toast(showSuccessRoomCreate);
                   })
-                  .catch(() => {
-                    toast(showErrorRoomName);
+                  .catch((err) => {
+                    if (err.status !== 500) toast(showErrorRoomName);
                   });
               }}
             >
