@@ -7,9 +7,10 @@ import { useState } from "react";
 
 export default function RoomsStack() {
   const user = useSelector(userSelector);
-  const allRooms = useSelector(roomsSelector);
+  const allRooms = useSelector((state) => {
+    return roomsSelector(state).slice((button - 1) * 6, button * 6);
+  });
   const [button, setButton] = useState(1);
-  const [rooms, setRooms] = useState([]);
   let buttons = [],
     index = 1;
   for (let i = 0; i < allRooms.length; i += 6) {
@@ -59,7 +60,6 @@ export default function RoomsStack() {
               key={index}
               onClick={() => {
                 setButton(index);
-                setRooms(allRooms.slice((index - 1) * 6, index * 6));
               }}
             >
               {index}
