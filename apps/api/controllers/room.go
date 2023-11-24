@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/folklinoff/hack_and_change/dto"
 	"github.com/folklinoff/hack_and_change/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -93,6 +94,7 @@ func (h *RoomHandler) Save(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param Set-Cookie header string true "Authorization token"
+// @Param password body dto.JoinRoomRequestDTO false "Room with password"
 // @Success 200 {object} models.Room
 // @Failure 400 {object} ErrorMessage
 // @Failure 401 {object} ErrorMessage
@@ -104,6 +106,7 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 	roomId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("bad url: room id is not an integer: %s", err.Error())})
+		return
 	}
 
 	userId, _ := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
@@ -119,18 +122,18 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 		}
 	}
 	if repoRoom.Private {
-		var room models.Room
-		if err := c.ShouldBindJSON(&room); err != nil {
+		var req dto.JoinRoomRequestDTO
+		if err := c.ShouldBindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind room: %s", err.Error())})
 			return
 		}
 
-		enteredPassword := room.Password
+		enteredPassword := req.Password
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
 			return
 		}
-		room, err = h.repo.LogIntoRoom(ctx, roomId, userId, enteredPassword)
+		room, err := h.repo.LogIntoRoom(ctx, roomId, userId, enteredPassword)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
 			return
