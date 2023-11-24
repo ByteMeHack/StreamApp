@@ -14,7 +14,7 @@ env:
   DOCKER_BACKEND_USERNAME: ${{ secrets.DOCKER_BACKEND_USERNAME }}
   DOCKER_BACKEND_PASSWORD: ${{ secrets.DOCKER_BACKEND_PASSWORD }}
   ID_RSA: ${{ secrets.ID_RSA }}
-  SERVER_USER: ${{ secrets.SERVER_USER }}
+  SERVER_USER: ${{ secrets.SERVER_USERNAME }}
   SERVER_IP: ${{ secrets.SERVER_IP }}
 
 jobs:
