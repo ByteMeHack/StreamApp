@@ -60,10 +60,10 @@ export default function RoomsStack() {
             <Button
               key={index}
               onClick={() => {
-                setButton(index);
+                setButton(index+1);
               }}
             >
-              {index}
+              {index+1}
             </Button>
           );
         })}
