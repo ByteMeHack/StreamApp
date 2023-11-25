@@ -107,7 +107,6 @@ export default function DrawerLogin() {
 
           <DrawerFooter className="blackBlock">
             <Button
-              variant="outline"
               colorScheme="white"
               mr={3}
               onClick={onClose}

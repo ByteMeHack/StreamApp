@@ -68,3 +68,9 @@ export async function getRoomById(id) {
     return response.data;
   });
 }
+
+export async function getRoomByName(name) {
+  return instance.get(`/rooms/${name}`).then(function (response) {
+    return response.data;
+  });
+}

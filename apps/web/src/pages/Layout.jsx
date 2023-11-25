@@ -39,7 +39,7 @@ export default function Layout() {
                 </Button>
               </Link>
               <Button
-                colorScheme="red"
+                colorScheme="white"
                 color="#242424"
                 onClick={() => {
                   logoutReq();

@@ -119,7 +119,7 @@ export default function ModalCreateRoom() {
                 onClose();
               }}
               color="#242424"
-              colorScheme="whiteAlpha"
+              colorScheme="white"
               mr={3}
             >
               Close

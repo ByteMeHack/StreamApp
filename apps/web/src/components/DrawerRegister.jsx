@@ -115,12 +115,7 @@ export default function DrawerRegister() {
           </DrawerBody>
 
           <DrawerFooter className="blackBlock">
-            <Button
-              variant="outline"
-              colorScheme="whiteAlpha"
-              mr={3}
-              onClick={onClose}
-            >
+            <Button colorScheme="white" mr={3} onClick={onClose}>
               Cancel
             </Button>
             <Button
