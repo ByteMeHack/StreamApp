@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/folklinoff/hack_and_change/models"
@@ -71,10 +70,9 @@ func (u *RoomRepository) GetByID(ctx context.Context, id int64) (models.Room, er
 	room := RoomEntityToModel(ent)
 	return room, nil
 }
-
 func (u *RoomRepository) Get(ctx context.Context, name string) ([]models.Room, error) {
 	var ents []Room
-	err := u.db.WithContext(ctx).Model(&Room{}).Preload("Users").Where("name LIKE %?%", name).Find(&ents).Error
+	err := u.db.WithContext(ctx).Model(&Room{}).Preload("Users").Where("lower(name) LIKE lower(?)", "%"+name+"%").Find(&ents).Error
 	if err != nil {
 		return []models.Room{}, fmt.Errorf("RoomRepository::Get: couldn't get all rooms: %w", err)
 	}
@@ -140,7 +138,6 @@ func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, rela
 
 func RoomModelToEntity(r models.Room) (Room, error) {
 	hashedPassword, err := hashing.GeneratePasswordHash(r.Password)
-	log.Println("Hashed password: ", hashedPassword, r.Password)
 	if err != nil {
 		return Room{}, fmt.Errorf("RoomModelToEntity: couldn't convert Room model to entity: %w", err)
 	}

@@ -92,7 +92,6 @@ func (u *UserRepository) GetUserRooms(ctx context.Context, id int64) ([]models.R
 
 func userModelToEntity(u models.User) (User, error) {
 	hashedPassword, err := hashing.GeneratePasswordHash(u.Password)
-	log.Println("Hashed password: ", hashedPassword, u.Password)
 	if err != nil {
 		return User{}, fmt.Errorf("userModelToEntity: couldn't convert user model to entity: %w", err)
 	}
