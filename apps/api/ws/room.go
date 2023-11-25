@@ -20,9 +20,10 @@ var upgrader = websocket.Upgrader{
 
 func ConnectToRoom(c *gin.Context) {
 	c.Request.ParseForm()
-	roomId, err := strconv.ParseInt(c.Request.FormValue("id"), 10, 64)
+	roomId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		log.Printf("ConnectToRoom: invalid room id")
+		return
 	}
 	room := rooms[roomId]
 
