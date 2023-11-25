@@ -43,7 +43,7 @@ export default function SearchRoom() {
           >
             Hello
           </Heading>
-          <Text fontSize="18px" mt={3} mb={2}>
+          <Text fontSize="18px" mt={3} mb={2} color="gray.500">
             Here you can search for rooms you want to enter
           </Text>
           <Link to="/">
