@@ -1,7 +1,6 @@
 package ws
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -32,16 +31,22 @@ func ConnectToRoom(c *gin.Context) {
 		log.Printf("ConnectToRoom: invalid room id")
 		return
 	}
-	room := rooms[roomId]
+	room, ok := rooms[roomId]
+	if !ok {
+		log.Printf("ConnectToRoom: room with id %d doesn't exist", roomId)
+		return
+	}
 	userId, err := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
 	if err != nil {
 		log.Printf("ConnectToRoom: invalid user id")
 		return
 	}
+
 	if !IsUserInTheRoom(roomId, userId) {
 		log.Printf("ConnectToRoom: user %d is not in the room %d", userId, roomId)
 		return
 	}
+
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Printf("ConnectToRoom: error occured when connecting to room: %s", err.Error())
@@ -61,22 +66,31 @@ func ConnectToRoom(c *gin.Context) {
 			conn.ReadJSON(message)
 			ch <- message
 			switch message.Type {
-			case models.CreatedMessage:
-				room.Messages = append(room.Messages, message)
-			case models.JoinedMessage:
-				room.Messages = append(room.Messages, message)
 			case models.LeftMessage:
-
+				DeleteUserFromRoom(roomId, userId)
+			case models.KickMessage:
+				kickedUserId, err := strconv.ParseInt(message.Contents, 10, 64)
+				if err != nil {
+					log.Printf("ConnectToRoom: invalid user id")
+					continue
+				}
+				DeleteUserFromRoom(roomId, kickedUserId)
 			}
+			SendMessageToRoom(roomId, message)
+			BroadcastMessageToRoom(roomId, message)
 		}
 	}()
 	for {
-		select {
-		case <-time.After(1 * time.Second):
-			conn.WriteJSON(models.Message{Contents: "Hello, world!"})
-		case msg := <-ch:
-			conn.WriteJSON(models.Message{Contents: fmt.Sprintf("Received message %+v from client", msg)})
-		}
+		<-time.After(1 * time.Second)
+		conn.WriteJSON(models.Message{Contents: "Hello, world!"})
 		time.Sleep(1 * time.Second)
+	}
+}
+
+func BroadcastMessageToRoom(roomId int64, message models.Message) {
+	room := rooms[roomId]
+	for i := range room.Users {
+		conn := conns[roomId][room.Users[i].ID]
+		conn.WriteJSON(message)
 	}
 }
