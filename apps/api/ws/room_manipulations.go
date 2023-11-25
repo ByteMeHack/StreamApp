@@ -16,6 +16,7 @@ func AddUserToRoom(roomId int64, userId int64) {
 	room := rooms[roomId]
 	room.Users = append(room.Users, models.User{})
 	rooms[roomId] = room
+	conns[roomId][userId] = &websocket.Conn{}
 	BroadcastMessageToRoom(roomId, models.Message{UserId: userId, Type: models.JoinedMessage, Contents: fmt.Sprintf("User with id %d joined the room", userId)})
 }
 
