@@ -10,7 +10,7 @@ export default function NotFound() {
         display="inline-block"
         as="h2"
         size="2xl"
-        bgGradient="linear(to-r, green.400, green.600)"
+        bgGradient="linear(to-r, red.400, red.600)"
         backgroundClip="text"
       >
         404
@@ -24,8 +24,8 @@ export default function NotFound() {
 
       <Link to="/">
         <Button
-          colorScheme="green"
-          bgGradient="linear(to-r, green.400, green.500, green.600)"
+          colorScheme="red"
+          bgGradient="linear(to-r, red.400, red.500, red.600)"
           color="black"
           variant="solid"
         >

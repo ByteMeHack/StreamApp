@@ -55,7 +55,7 @@ export default function RoomsStack() {
             display="inline-block"
             as="h2"
             size="2xl"
-            bgGradient="linear(to-r, green.400, green.600)"
+            bgGradient="linear(to-r, red.400, red.600)"
             backgroundClip="text"
           >
             Unauthorised

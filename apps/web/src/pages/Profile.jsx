@@ -11,12 +11,7 @@ export default function Profile() {
     getUserByIdReq(id).then((res) => setUser(res));
   }, []);
   return (
-    <Stack
-      direction="column"
-      gap={2}
-      placeItems="center"
-      className="grayBlock"
-    >
+    <Stack direction="column" gap={2} placeItems="center" className="grayBlock">
       {user ? (
         <>
           <Heading className="grayBlock">{user.name}</Heading>
@@ -27,7 +22,7 @@ export default function Profile() {
           thickness="4px"
           placeContent="center"
           speed="0.65s"
-          color="green.500"
+          color="red.500"
           size="xl"
         />
       )}

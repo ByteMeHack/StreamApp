@@ -6,7 +6,7 @@ export default function RoomCard({ id, name }) {
     <Link to={`/rooms/${id}`}>
       <Card
         border="1px"
-        borderColor="#55bd79"
+        borderColor="#c23838"
         overflow="hidden"
         borderRadius="lg"
         width={300}
@@ -16,7 +16,7 @@ export default function RoomCard({ id, name }) {
           {name}
         </Heading>
         <Image
-          src={`https://cataas.com/cat/says/${name}?fontSize=25&type=square&height=300&width=300&fontColor=orange`}
+          src={`https://cataas.com/cat/says/${name}?fontSize=25&type=square&height=300&width=300&fontColor=red`}
           width={300}
           height={300}
           objectFit="cover"

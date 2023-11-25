@@ -30,9 +30,9 @@ export default function Layout() {
             <>
               <Link to={`/users/${user.id}`}>
                 <Button
-                  colorScheme="green"
+                  colorScheme="red"
                   color="#242424"
-                  bgGradient="linear(to-r, green.400, green.500, green.600)"
+                  bgGradient="linear(to-r, red.400, red.500, red.600)"
                   size="lg"
                 >
                   {user.name} profile

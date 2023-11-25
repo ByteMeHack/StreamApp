@@ -37,9 +37,9 @@ export default function ModalCreateRoom() {
         mb={3}
         onClick={onOpen}
         size="lg"
-        colorScheme="green"
+        colorScheme="red"
         color="#242424"
-        bgGradient="linear(to-r, green.400, green.500, green.600)"
+        bgGradient="linear(to-r, red.400, red.500, red.600)"
       >
         Create new room
       </Button>
@@ -54,7 +54,7 @@ export default function ModalCreateRoom() {
       >
         <ModalContent>
           <ModalHeader className="blackBlock">Create your room</ModalHeader>
-          <ModalCloseButton bgGradient="linear(to-r, green.400, green.500, green.600)" />
+          <ModalCloseButton bgGradient="linear(to-r, red.400, red.500, red.600)" />
           <ModalBody className="blackBlock">
             <form
               id="my-form"
@@ -84,7 +84,7 @@ export default function ModalCreateRoom() {
                   type="text"
                   isRequired
                   onChange={(e) => setName(e.target.value)}
-                  borderColor="#55bd79"
+                  borderColor="#c23838"
                 />
                 <Checkbox onChange={(e) => setPrivate(e.target.checked)}>
                   Private room
@@ -96,12 +96,12 @@ export default function ModalCreateRoom() {
                       type={show ? "text" : "password"}
                       isRequired={private_room}
                       onChange={(e) => setPass(e.target.value)}
-                      borderColor="#55bd79"
+                      borderColor="#c23838"
                     />
                     <InputRightElement width="4.5rem">
                       <Button
                         size="sm"
-                        colorScheme="green"
+                        colorScheme="red"
                         color="black"
                         onClick={handleClick}
                       >
@@ -119,7 +119,7 @@ export default function ModalCreateRoom() {
                 onClose();
               }}
               color="#242424"
-              colorScheme="red"
+              colorScheme="whiteAlpha"
               mr={3}
             >
               Close
@@ -128,8 +128,8 @@ export default function ModalCreateRoom() {
               form="my-form"
               type="submit"
               color="#242424"
-              colorScheme="green"
-              bgGradient="linear(to-r, green.400, green.500, green.600)"
+              colorScheme="red"
+              bgGradient="linear(to-r, red.400, red.500, red.600)"
             >
               Create
             </Button>

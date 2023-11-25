@@ -41,9 +41,9 @@ export default function DrawerRegister() {
       <Button
         ref={btnRef}
         onClick={onOpen}
-        colorScheme="green"
+        colorScheme="red"
         color="#242424"
-        bgGradient="linear(to-r, green.400, green.500, green.600)"
+        bgGradient="linear(to-r, red.400, red.500, red.600)"
         size="lg"
       >
         Register
@@ -82,14 +82,14 @@ export default function DrawerRegister() {
                   type="text"
                   required
                   onChange={(e) => setName(e.target.value)}
-                  borderColor="#55bd79"
+                  borderColor="#c23838"
                 />
                 <Input
                   placeholder="Type your email"
                   type="email"
                   required
                   onChange={(e) => setEmail(e.target.value)}
-                  borderColor="#55bd79"
+                  borderColor="#c23838"
                 />
                 <InputGroup>
                   <Input
@@ -97,12 +97,12 @@ export default function DrawerRegister() {
                     type={show ? "text" : "password"}
                     required
                     onChange={(e) => setPass(e.target.value)}
-                    borderColor="#55bd79"
+                    borderColor="#c23838"
                   />
                   <InputRightElement width="4.5rem">
                     <Button
                       size="sm"
-                      colorScheme="green"
+                      colorScheme="red"
                       color="black"
                       onClick={handleClick}
                     >
@@ -117,14 +117,14 @@ export default function DrawerRegister() {
           <DrawerFooter className="blackBlock">
             <Button
               variant="outline"
-              colorScheme="green"
+              colorScheme="whiteAlpha"
               mr={3}
               onClick={onClose}
             >
               Cancel
             </Button>
             <Button
-              colorScheme="green"
+              colorScheme="red"
               textColor="black"
               form="my-form"
               type="submit"
