@@ -19,7 +19,6 @@ export default function RoomsStack({ rooms }) {
     <Stack className="grayBlock" placeItems="center" spacing={15}>
       {user ? (
         <>
-          <ModalCreateRoom />
           <Stack placeItems="center" mb={5}>
             <Stack
               direction="row"

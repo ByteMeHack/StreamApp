@@ -3,6 +3,7 @@ import RoomsStack from "../components/RoomsStack";
 import { useDispatch, useSelector } from "react-redux";
 import { roomsSelector, userSelector } from "../store/selectors";
 import { setRooms } from "../store/roomSlice";
+import { Stack } from "@chakra-ui/react";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -13,5 +14,10 @@ export default function Home() {
       dispatch(setRooms(user.id));
     }
   }, [user]);
-  return <RoomsStack rooms={allRooms} />;
+  return (
+    <Stack placeItems="center" spacing={15}>
+      <ModalCreateRoom />
+      <RoomsStack rooms={allRooms} />
+    </Stack>
+  );
 }
