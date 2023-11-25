@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import { useEffect, useState } from "react";
 import { getRoomById } from "../api";
-import ModalEnterRoom from "../components/ModalEnterRoom";
 
 export default function Room() {
   const id = useParams().id;
