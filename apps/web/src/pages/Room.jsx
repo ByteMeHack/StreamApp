@@ -18,31 +18,34 @@ export default function Room() {
   }, []);
   return (
     <Box className="grayBlock" display="flex" justifyContent="center">
-      <ModalEnterRoom id={id} isOpen={needPass} />
-      {room && (
-        <Card
-          w="90%"
-          className="blackBlock"
-          overflow="hidden"
-          borderRadius="lg"
-          border="4px"
-          borderColor="#2f3235"
-        >
-          <Heading
+      {needPass ? (
+        <ModalEnterRoom id={id} />
+      ) : (
+        room && (
+          <Card
+            w="90%"
             className="blackBlock"
-            color="gray"
-            size="lg"
-            pt={3}
-            pl={3}
-            pr={3}
+            overflow="hidden"
+            borderRadius="lg"
+            border="4px"
+            borderColor="#2f3235"
           >
-            {room.name}
-          </Heading>
-          <CardBody className="blackBlock">
-            <Input type="range" value={20} min={0} max={200} />
-            <Chat />
-          </CardBody>
-        </Card>
+            <Heading
+              className="blackBlock"
+              color="gray"
+              size="lg"
+              pt={3}
+              pl={3}
+              pr={3}
+            >
+              {room.name}
+            </Heading>
+            <CardBody className="blackBlock">
+              <Input type="range" value={20} min={0} max={200} />
+              <Chat />
+            </CardBody>
+          </Card>
+        )
       )}
     </Box>
   );
