@@ -8,7 +8,7 @@ export default function SearchRoom() {
   const [rooms, setRooms] = useState([]);
   const [name, setName] = useState("");
   return (
-    <Stack flexGrow={1} width="90%" placeContent="center">
+    <Stack flexGrow={1} width="90%" placeContent="center" alignSelf="center">
       <Stack direction="row" spacing={10} width="50%" placeContent="center">
         <Input
           placeholder="Type name of the room"
