@@ -81,10 +81,12 @@ func ConnectToRoom(c *gin.Context) {
 
 	log.Printf("ConnectToRoom: new user joined with id: %d\n", userId)
 	conns[roomId][userId] = conn
-	err = conn.ReadJSON(&models.Message{})
-	if err != nil {
-		log.Printf("ConnectToRoom: error occured when reading message: %s", err.Error())
-		return
+	for {
+		conn.ReadMessage()
+		if err == nil {
+			break
+		}
+		time.Sleep(1 * time.Second)
 	}
 	for i := range room.Messages {
 		conn.WriteJSON(room.Messages[i])
