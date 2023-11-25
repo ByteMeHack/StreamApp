@@ -1,4 +1,4 @@
-import { Button, Heading, Image, Stack} from "@chakra-ui/react";
+import { Button, Heading, Image, Stack } from "@chakra-ui/react";
 import DrawerRegister from "../components/DrawerRegister";
 import { Link, Outlet } from "react-router-dom";
 import DrawerLogin from "../components/DrawLogin";
@@ -28,11 +28,11 @@ export default function Layout() {
             <Heading className="grayBlock">Stream audio</Heading>
           </Stack>
         </Link>
-        <Stack direction="row" gap={3}>
+        <Stack direction="row" spacing={5} alignItems="center">
           {user ? (
             <>
               <Link to="/rooms/search">
-                <Button colorScheme="red" variant="link">
+                <Button colorScheme="red" variant="link" size="lg">
                   Search room
                 </Button>
               </Link>
