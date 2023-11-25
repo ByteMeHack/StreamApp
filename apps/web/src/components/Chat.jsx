@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
 
   function sendMessage() {
@@ -26,7 +26,7 @@ export default function Chat({ room_id }) {
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.onmessage = (event) => {
-      setMessages([...messages, event.data]);
+      console.log(event.data);
     };
   }, []);
 
@@ -37,7 +37,7 @@ export default function Chat({ room_id }) {
           Chat
         </Heading>
         <CardBody bgColor="gray">
-          <Stack>
+          {/* <Stack>
             {messages.map((message) => {
               return (
                 <Box display="flex">
@@ -47,7 +47,7 @@ export default function Chat({ room_id }) {
                 </Box>
               );
             })}
-          </Stack>
+          </Stack> */}
           <Stack direction="row" spacing={3}>
             <Input
               placeholder="Type message here..."
