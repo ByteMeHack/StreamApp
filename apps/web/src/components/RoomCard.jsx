@@ -12,7 +12,7 @@ export default function RoomCard({ id, name }) {
         width={300}
         height={336}
         alignItems="center"
-        bgColor="#e02525"
+        bgColor="#2f3235"
       >
         <Heading
           padding={3}
@@ -26,7 +26,7 @@ export default function RoomCard({ id, name }) {
           {name}
         </Heading>
         <Image
-          bgColor="#e02525"
+          bgColor="#2f3235"
           fallback={
             <Spinner
               bgColor="#2f3235"
