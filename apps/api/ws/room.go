@@ -28,7 +28,7 @@ func ConnectToRoom(c *gin.Context) {
 	room := rooms[roomId]
 
 	userId := c.Request.Header.Get("XUserID")
-
+	c.Request.Header.Set("Connection", "Upgrade")
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Printf("ConnectToRoom: error occured when connecting to room: %s", err.Error())
