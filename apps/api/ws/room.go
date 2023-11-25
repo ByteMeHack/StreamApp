@@ -101,7 +101,7 @@ func ConnectToRoom(c *gin.Context) {
 				}
 				DeleteUserFromRoom(roomId, kickedUserId)
 			}
-			SendMessageToRoom(roomId, message)
+			SaveMessageToRoom(roomId, message)
 			BroadcastMessageToRoom(roomId, message)
 		}
 	}()

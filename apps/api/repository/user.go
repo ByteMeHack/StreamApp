@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/folklinoff/hack_and_change/models"
 	"github.com/folklinoff/hack_and_change/pkg/hashing"
@@ -70,7 +69,6 @@ func (u *UserRepository) LoginUserByMail(ctx context.Context, mail string, passw
 	}
 	err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
 	if err != nil {
-		log.Println("Given password: ", password, "; User: ", mail)
 		return models.User{}, fmt.Errorf("UserRepository::LoginUserByMail: couldn't login user: password is incorrect: %w", err)
 	}
 	user := userEntityToModel(ent)

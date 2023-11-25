@@ -35,7 +35,7 @@ func IsUserInTheRoom(roomId int64, userId int64) bool {
 	return false
 }
 
-func SendMessageToRoom(roomId int64, message models.Message) {
+func SaveMessageToRoom(roomId int64, message models.Message) {
 	room := rooms[roomId]
 	room.Messages = append(room.Messages, message)
 	rooms[roomId] = room
@@ -47,6 +47,7 @@ func DeleteUserFromRoom(roomId int64, userId int64) {
 		if room.Users[i].ID == userId {
 			room.Users = append(room.Users[:i], room.Users[i+1:]...)
 			rooms[roomId] = room
+			delete(conns[roomId], userId)
 			return
 		}
 	}
