@@ -95,13 +95,14 @@ func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, pass
 
 	var user User
 	err = u.db.Model(&User{}).Where("id = ?", userId).First(&user).Error
+
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
 	}
-	err = u.db.Raw(`INSERT INTO user_rooms (user_id, room_id, created_time, relation) 
-		VALUES (?, ?, ?, ?) ON CONFLICT (user_id, room_id) 
-		DO UPDATE SET deleted_time = NULL`,
-		userId, id, time.Now(), "member").Error
+	fmt.Println("executing query")
+	ent.Users = append(ent.Users, user)
+	err = u.db.Save(&ent).Error
+	fmt.Printf("error: %v\n", err)
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
 	}
@@ -115,10 +116,18 @@ func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, pass
 }
 
 func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, relation string) (models.Room, error) {
-	err := u.db.Raw(`INSERT INTO user_rooms (user_id, room_id, created_time, relation) 
-		VALUES (?, ?, ?, ?) ON CONFLICT (user_id, room_id) 
-		DO UPDATE SET deleted_time = NULL`,
-		userId, roomId, time.Now(), "member").Error
+	var user User
+	err := u.db.WithContext(ctx).Model(&User{}).Where("id = ?", userId).First(&user).Error
+	if err != nil {
+		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
+	}
+	var ent Room
+	err = u.db.WithContext(ctx).Where(&Room{ID: roomId}).Preload("Users").First(&ent).Error
+	if err != nil {
+		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
+	}
+	ent.Users = append(ent.Users, user)
+	err = u.db.Save(&ent).Error
 	if err != nil {
 		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
 	}
