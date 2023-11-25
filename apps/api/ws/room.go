@@ -95,9 +95,12 @@ func ConnectToRoom(c *gin.Context) {
 
 	go ListenForIncomingMessages(roomId, userId, conn)
 	for {
-		<-time.After(1 * time.Second)
-		conn.WriteJSON(models.Message{Contents: "Hello, world!", Timestamp: time.Now().Format("2006-01-02 15:04:05")})
-		time.Sleep(1 * time.Second)
+		conn.WriteJSON(
+			models.Message{
+				Contents:  "Hello, world!",
+				Timestamp: time.Now().Format("2006-01-02 15:04:05"),
+			})
+		time.Sleep(5 * time.Second)
 	}
 }
 
