@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import RoomsStack from "../components/RoomsStack";
 
 export default function SearchRoom() {
-  const [rooms, setRooms] = useState(null);
+  const [rooms, setRooms] = useState([]);
   const [name, setName] = useState("");
   return (
     <Stack
@@ -24,8 +24,7 @@ export default function SearchRoom() {
         <Button
           onClick={() => {
             getRoomByName(name).then((res) => {
-              setRooms(res[0]);
-              console.log(res);
+              setRooms(res);
             });
           }}
         >
@@ -33,7 +32,7 @@ export default function SearchRoom() {
         </Button>
       </Stack>
 
-      {rooms && rooms.length > 0 ? (
+      {rooms.length > 0 ? (
         <RoomsStack rooms={rooms} />
       ) : (
         <Box textAlign="center" py={10} px={6} className="grayBlock">
