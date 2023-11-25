@@ -8,15 +8,28 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const socket = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
-  socket.onmessage = (event) => {
-    setMessages([...messages, event.data]);
-  };
+  const socketRef = useRef(null);
+
+  function sendMessage() {
+    if (socketRef.current)
+      socketRef.current.send({
+        message_type: 1,
+        contents: message,
+      });
+  }
+
+  useEffect(() => {
+    socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
+    socketRef.current.onmessage = (event) => {
+      setMessages([...messages, event.data]);
+    };
+  }, []);
+
   return (
     <Box className="blackBlock" p={3}>
       <Card>
@@ -41,14 +54,8 @@ export default function Chat({ room_id }) {
               onChange={(e) => setMessage(e.target.value)}
             />
             <Button
-              onClick={() => {
-                socket.send(
-                  JSON.stringify({
-                    message_type: 1,
-                    contents: message,
-                  })
-                );
-              }}
+              isDisabled={socketRef.current === null}
+              onClick={sendMessage}
             >
               Send
             </Button>
