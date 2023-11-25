@@ -9,6 +9,7 @@ export default function Room() {
   const id = useParams().id;
   const [room, setRoom] = useState(null);
   const [needPass, setNeedPass] = useState(false);
+  const [pass, setPass] = useState("");
   useEffect(() => {
     getRoomById(id)
       .then((res) => setRoom(res))
@@ -19,7 +20,26 @@ export default function Room() {
   return (
     <Box className="grayBlock" display="flex" justifyContent="center">
       {needPass ? (
-        <ModalEnterRoom id={id} />
+        <Stack direction="row" spacing={10} width={300} placeContent="center">
+          <Input
+            autocomplete="off"
+            placeholder="Name of room"
+            type="text"
+            isRequired
+            onChange={(e) => setPass(e.target.value)}
+            borderColor="#e02525"
+          />
+          <Button
+            onClick={async () => {
+              await registerToRoom(id, pass).then((res) => {
+                setRoom(res);
+                setNeedPass(false);
+              });
+            }}
+          >
+            Enter
+          </Button>
+        </Stack>
       ) : (
         room && (
           <Card
