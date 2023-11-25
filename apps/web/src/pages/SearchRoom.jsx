@@ -12,7 +12,7 @@ export default function SearchRoom() {
       <Stack direction="row" spacing={10} minWidth="100%">
         <Input
           placeholder="Type name of the room"
-          onChange={() => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           isRequired
         />
         <Button
