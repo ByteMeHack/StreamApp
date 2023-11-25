@@ -9,7 +9,7 @@ export default function RoomCard({ id, name }) {
         borderColor="#e02525"
         overflow="hidden"
         borderRadius="lg"
-        width="fit-content"
+        width={300}
         height={356}
       >
         <Heading
