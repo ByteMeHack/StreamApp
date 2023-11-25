@@ -13,6 +13,7 @@ import (
 )
 
 var rooms map[int64]models.Room
+var conns map[int64]map[int64]*websocket.Conn
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -24,24 +25,30 @@ var upgrader = websocket.Upgrader{
 }
 
 func ConnectToRoom(c *gin.Context) {
-	c.Request.ParseForm()
+	c.Request.Header.Set("Upgrade", "Websocket")
+	c.Request.Header.Set("Connection", "Upgrade")
 	roomId, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		log.Printf("ConnectToRoom: invalid room id")
 		return
 	}
 	room := rooms[roomId]
-
-	userId := c.Request.Header.Get("XUserID")
-	c.Request.Header.Set("Connection", "Upgrade")
-	c.Request.Header.Set("Upgrade", "Websocket")
+	userId, err := strconv.ParseInt(c.Request.Header.Get("XUserID"), 10, 64)
+	if err != nil {
+		log.Printf("ConnectToRoom: invalid user id")
+		return
+	}
+	if !IsUserInTheRoom(roomId, userId) {
+		log.Printf("ConnectToRoom: user %d is not in the room %d", userId, roomId)
+		return
+	}
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Printf("ConnectToRoom: error occured when connecting to room: %s", err.Error())
 		return
 	}
 	defer conn.Close()
-	log.Printf("ConnectToRoom: new user joined with id: %s\n", userId)
+	log.Printf("ConnectToRoom: new user joined with id: %d\n", userId)
 
 	for i := range room.Messages {
 		conn.WriteJSON(room.Messages[i])
@@ -55,6 +62,11 @@ func ConnectToRoom(c *gin.Context) {
 			ch <- message
 			switch message.Type {
 			case models.CreatedMessage:
+				room.Messages = append(room.Messages, message)
+			case models.JoinedMessage:
+				room.Messages = append(room.Messages, message)
+			case models.LeftMessage:
+
 			}
 		}
 	}()
@@ -68,22 +80,3 @@ func ConnectToRoom(c *gin.Context) {
 		time.Sleep(1 * time.Second)
 	}
 }
-
-func CreateNewRoom(c *gin.Context) {
-	id, _ := strconv.ParseInt(c.Request.PostFormValue("id"), 10, 64)
-	rooms[id] = models.Room{}
-}
-
-// func AddUserToRoom(c *gin.Context) {
-// 	c.Request.ParseForm()
-// 	roomId, err := strconv.ParseInt(c.Request.FormValue("id"), 10, 64)
-// 	if err != nil {
-// 		log.Printf("AddUserToRoom: invalid room id")
-// 	}
-// 	room := rooms[roomId]
-
-// 	userId := c.Request.Header.Get("XUserID")
-
-// 	room.Users = append(room.Users, models.User{ID: userId})
-// 	*rooms[roomId].Users = append(*rooms[roomId].Users)
-// }
