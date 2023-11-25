@@ -101,8 +101,8 @@ export default function ModalCreateRoom() {
                     <InputRightElement width="4.5rem">
                       <Button
                         size="sm"
-                        colorScheme="red"
-                        color="black"
+                        color="#242424"
+                        bgColor="white"
                         onClick={handleClick}
                       >
                         {show ? "Hide" : "Show"}
@@ -119,7 +119,7 @@ export default function ModalCreateRoom() {
                 onClose();
               }}
               color="#242424"
-              colorScheme="white"
+              bgColor="white"
               mr={3}
             >
               Close

@@ -39,8 +39,8 @@ export default function DrawerLogin() {
     <>
       <Button
         ref={btnRef}
-        variant="outline"
-        colorScheme="red"
+        color="#242424"
+        bgColor="white"
         onClick={onOpen}
         size="lg"
       >
@@ -93,8 +93,8 @@ export default function DrawerLogin() {
                   <InputRightElement width="4.5rem">
                     <Button
                       size="sm"
-                      colorScheme="red"
-                      color="black"
+                      color="#242424"
+                      bgColor="white"
                       onClick={handleClick}
                     >
                       {show ? "Hide" : "Show"}
@@ -106,11 +106,7 @@ export default function DrawerLogin() {
           </DrawerBody>
 
           <DrawerFooter className="blackBlock">
-            <Button
-              colorScheme="white"
-              mr={3}
-              onClick={onClose}
-            >
+            <Button bgColor="white" mr={3} onClick={onClose}>
               Cancel
             </Button>
             <Button
