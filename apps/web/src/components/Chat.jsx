@@ -17,10 +17,12 @@ export default function Chat({ room_id }) {
 
   function sendMessage() {
     if (socketRef.current)
-      socketRef.current.send({
-        message_type: 1,
-        contents: message,
-      });
+      socketRef.current.send(
+        JSON.stringify({
+          message_type: 1,
+          contents: message,
+        })
+      );
   }
 
   useEffect(() => {
