@@ -1,28 +1,17 @@
 package ws
 
 import (
-	"log"
-	"strconv"
-
 	"github.com/folklinoff/hack_and_change/models"
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
-func CreateNewRoom(c *gin.Context) {
-	id, _ := strconv.ParseInt(c.Request.PostFormValue("id"), 10, 64)
-	rooms[id] = models.Room{}
+func CreateNewRoom(room models.Room) {
+	rooms[room.ID] = room
+	conns[room.ID] = make(map[int64]*websocket.Conn)
 }
 
-func AddUserToRoom(c *gin.Context) {
-	c.Request.ParseForm()
-	roomId, err := strconv.ParseInt(c.Request.FormValue("id"), 10, 64)
-	if err != nil {
-		log.Printf("AddUserToRoom: invalid room id")
-	}
+func AddUserToRoom(roomId int64, userId int64) {
 	room := rooms[roomId]
-
-	// userId := c.Request.Header.Get("XUserID")
-
 	room.Users = append(room.Users, models.User{})
 	// rooms[roomId].Users = append(rooms[roomId].Users)
 	rooms[roomId] = room
