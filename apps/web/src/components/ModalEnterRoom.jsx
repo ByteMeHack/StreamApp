@@ -16,7 +16,7 @@ import {
 export default function ModalEnterRoom({ id, isOpen }) {
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
-  <Modal blockScrollOnMount={false} isOpen={isOpen} className="blackBlock">
+  <Modal blockScrollOnMount={false} isOpen={true} className="blackBlock">
     <ModalContent>
       <ModalHeader className="blackBlock">
         Enter password to the room

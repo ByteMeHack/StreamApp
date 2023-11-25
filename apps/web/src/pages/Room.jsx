@@ -14,13 +14,11 @@ export default function Room() {
       .then((res) => setRoom(res))
       .catch(() => {
         setNeedPass(true);
-        console.log(needPass);
       });
   }, []);
   return (
     <Box className="grayBlock" display="flex" justifyContent="center">
       <ModalEnterRoom id={id} isOpen={needPass} />
-      vvvvvv
       {room && (
         <Card
           w="90%"
