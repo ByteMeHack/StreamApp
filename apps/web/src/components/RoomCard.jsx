@@ -11,6 +11,7 @@ export default function RoomCard({ id, name }) {
         borderRadius="lg"
         width={300}
         height={336}
+        alignItems="center"
       >
         <Heading
           padding={3}
@@ -26,6 +27,7 @@ export default function RoomCard({ id, name }) {
         <Image
           fallback={
             <Spinner
+              bgColor="#2f3235"
               thickness="4px"
               placeContent="center"
               speed="0.65s"
