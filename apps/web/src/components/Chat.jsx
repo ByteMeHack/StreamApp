@@ -11,9 +11,10 @@ import { useState } from "react";
 
 export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const socket = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
   socket.onmessage = (event) => {
-    console.log(event.data);
+    setMessages([...messages, event.data]);
   };
   return (
     <Box className="blackBlock" p={3}>
@@ -22,7 +23,17 @@ export default function Chat({ room_id }) {
           Chat
         </Heading>
         <CardBody bgColor="gray">
-          <Stack>Elements</Stack>
+          <Stack>
+            {messages.map((message) => {
+              return (
+                <Box display="flex">
+                  <Text>User {message.user_id}</Text>
+                  <Text>{message.contents}</Text>
+                  <Text>{new Date(+message.timestamp)}</Text>
+                </Box>
+              );
+            })}
+          </Stack>
           <Stack direction="row" spacing={3}>
             <Input
               placeholder="Type message here..."
@@ -32,7 +43,6 @@ export default function Chat({ room_id }) {
               onClick={() => {
                 socket.send(
                   JSON.stringify({
-                    user_id: 1,
                     message_type: 1,
                     contents: message,
                   })
