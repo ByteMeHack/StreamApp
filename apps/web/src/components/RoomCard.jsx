@@ -10,16 +10,16 @@ export default function RoomCard({ id, name }) {
         overflow="hidden"
         borderRadius="lg"
         width={300}
-        height={356}
+        height={336}
       >
         <Heading
           padding={3}
           className="blackBlock"
           color="#e02525"
-          height={56}
+          height={36}
           whiteSpace="nowrap"
           width={300}
-          fontSize="large"
+          fontSize="larger"
         >
           {name}
         </Heading>
