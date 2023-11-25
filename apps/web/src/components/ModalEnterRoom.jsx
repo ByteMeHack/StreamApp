@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerToRoom } from "../api";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Stack,
+} from "@chakra-ui/react";
 
 export default function ModalEnterRoom({ id, isOpen }) {
   const [pass, setPass] = useState("");
