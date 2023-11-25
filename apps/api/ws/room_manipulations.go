@@ -21,7 +21,7 @@ func AddUserToRoom(roomId int64, user models.User) {
 		models.Message{
 			UserId:   user.ID,
 			Type:     models.JoinedMessage,
-			Contents: fmt.Sprintf("User with id %d joined the room", userId),
+			Contents: fmt.Sprintf("User with id %d joined the room", user.ID),
 		})
 }
 
