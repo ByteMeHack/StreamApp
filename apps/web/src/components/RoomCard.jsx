@@ -19,7 +19,7 @@ export default function RoomCard({ id, name }) {
           height={56}
           whiteSpace="nowrap"
           width={300}
-          fontSize="medium"
+          fontSize="large"
         >
           {name}
         </Heading>

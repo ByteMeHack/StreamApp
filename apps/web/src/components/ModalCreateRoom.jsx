@@ -73,6 +73,7 @@ export default function ModalCreateRoom() {
             >
               <Stack gap={5} className="blackBlock">
                 <Input
+                  autocomplete="off"
                   placeholder="Name of room"
                   type="text"
                   isRequired
@@ -85,6 +86,7 @@ export default function ModalCreateRoom() {
                 {private_room && (
                   <InputGroup>
                     <Input
+                      autocomplete="off"
                       placeholder="Room password"
                       type={show ? "text" : "password"}
                       isRequired={private_room}
