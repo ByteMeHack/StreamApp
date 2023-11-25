@@ -115,6 +115,7 @@ func BroadcastMessageToRoom(roomId int64, message models.Message) {
 	for i := range room.Users {
 		conn := conns[roomId][room.Users[i].ID]
 		if conn == nil {
+			log.Printf("BroadcastMessageToRoom: user with id %d is not connected to room %d", room.Users[i].ID, roomId)
 			continue
 		}
 		conn.WriteJSON(message)
