@@ -21,18 +21,12 @@ export default function Room() {
   const [pass, setPass] = useState("");
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-
-  let socket;
-
   useEffect(() => {
     getRoomById(id)
       .then((res) => setRoom(res))
       .catch(() => {
         setNeedPass(true);
       });
-    if (room) {
-      socket = WebSocket(`ws://bytemehack.ru/api/room/${room.id}`);
-    }
   }, []);
   return (
     <Box className="grayBlock" display="flex" justifyContent="center">
@@ -101,7 +95,7 @@ export default function Room() {
             </Heading>
             <CardBody className="blackBlock">
               <Input type="range" value={20} min={0} max={200} />
-              {socket && <Chat socket={socket} />}
+              <Chat room_id={room.id} />
             </CardBody>
           </Card>
         )

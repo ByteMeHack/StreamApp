@@ -8,26 +8,28 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Chat({ socket }) {
+export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
 
   function sendMessage() {
-    socket.send(
-      JSON.stringify({
-        message_type: 1,
-        contents: message,
-      })
-    );
+    if (socketRef.current)
+      socketRef.current.send(
+        JSON.stringify({
+          message_type: 1,
+          contents: message,
+        })
+      );
   }
-  
+
   useEffect(() => {
-    socket.onmessage = (event) => {
-      setMessages([...messages, event.data]);
-    };
+    socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
+    socketRef.current.addEventListener("message", (event) => {
+      console.log("Message from server ", event.data);
+    });
   }, []);
 
   return (
@@ -37,7 +39,7 @@ export default function Chat({ socket }) {
           Chat
         </Heading>
         <CardBody bgColor="gray">
-          {/* <Stack>
+          <Stack>
             {messages.map((message) => {
               return (
                 <Box display="flex">
@@ -47,7 +49,7 @@ export default function Chat({ socket }) {
                 </Box>
               );
             })}
-          </Stack> */}
+          </Stack>
           <Stack direction="row" spacing={3}>
             <Input
               placeholder="Type message here..."
