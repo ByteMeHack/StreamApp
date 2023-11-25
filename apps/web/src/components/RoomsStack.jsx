@@ -2,16 +2,15 @@ import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
 import RoomCard from "./RoomCard";
 import ModalCreateRoom from "./ModalCreateRoom";
 import { useSelector } from "react-redux";
-import { roomsSelector, userSelector } from "../store/selectors";
+import { userSelector } from "../store/selectors";
 import { useState } from "react";
 
-export default function RoomsStack() {
+export default function RoomsStack({ rooms }) {
   const user = useSelector(userSelector);
   const [currButton, setButton] = useState(1);
-  const allRooms = useSelector(roomsSelector);
   let buttons = [],
     index = 1;
-  for (let i = 0; i < allRooms.length; i += 6) {
+  for (let i = 0; i < rooms.length; i += 6) {
     buttons.push(index);
     index++;
   }
@@ -29,13 +28,9 @@ export default function RoomsStack() {
               gap={5}
               justifyContent="center"
             >
-              {allRooms
-                .slice((currButton - 1) * 6, currButton * 6)
-                .map((room) => {
-                  return (
-                    <RoomCard key={room.id} id={room.id} name={room.name} />
-                  );
-                })}
+              {rooms.slice((currButton - 1) * 6, currButton * 6).map((room) => {
+                return <RoomCard key={room.id} id={room.id} name={room.name} />;
+              })}
             </Stack>
           </Stack>
           <Stack direction="row" spacing={5}>

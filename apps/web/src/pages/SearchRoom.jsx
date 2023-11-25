@@ -1,14 +1,20 @@
 import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { getRoomByName } from "../api";
-import RoomCard from "../components/RoomCard";
 import { Link } from "react-router-dom";
+import RoomsStack from "../components/RoomsStack";
 
 export default function SearchRoom() {
-  const [room, setRoom] = useState(null);
+  const [rooms, setRooms] = useState(null);
   const [name, setName] = useState("");
   return (
-    <Stack flexGrow={1} alignItems="center" width="90%" alignContent="center">
+    <Stack
+      flexGrow={1}
+      justifyContent="center"
+      alignItems="center"
+      width="90%"
+      alignContent="center"
+    >
       <Stack direction="row" spacing={10} minWidth="100%">
         <Input
           placeholder="Type name of the room"
@@ -18,21 +24,17 @@ export default function SearchRoom() {
         <Button
           onClick={() => {
             getRoomByName(name).then((res) => {
-              setRoom(res[0]);
+              setRooms(res[0]);
               console.log(res);
             });
-            console.log(room);
-            console.log(name);
           }}
         >
           Search
         </Button>
       </Stack>
 
-      {room && room.length > 0 ? (
-        <Link to={`/rooms/${room.id}`}>
-          <RoomCard id={room.id} name={room.name} />
-        </Link>
+      {rooms && rooms.length > 0 ? (
+        <RoomsStack rooms={rooms} />
       ) : (
         <Box textAlign="center" py={10} px={6} className="grayBlock">
           <Heading
