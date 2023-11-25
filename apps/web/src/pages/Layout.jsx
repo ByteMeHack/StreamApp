@@ -1,4 +1,4 @@
-import { Button, Heading, Stack, VStack } from "@chakra-ui/react";
+import { Button, Heading, Image, Stack, VStack } from "@chakra-ui/react";
 import DrawerRegister from "../components/DrawerRegister";
 import { Link, Outlet } from "react-router-dom";
 import DrawerLogin from "../components/DrawLogin";
@@ -23,13 +23,16 @@ export default function Layout() {
     <Stack className="grayBlock" flexGrow={1}>
       <Stack direction="row" p={5} justifyContent="space-between">
         <Link to="/">
-          <Heading className="grayBlock">Stream audio</Heading>
+          <Stack direction="row" spacing={5}>
+            <Image src="/vite.svg" width={50} height={50} />
+            <Heading className="grayBlock">Stream audio</Heading>
+          </Stack>
         </Link>
         <Stack direction="row" gap={3}>
           {user ? (
             <>
               <Link to={`/users/${user.id}`}>
-                <Button bgColor="white" color="#c23838" size="lg">
+                <Button bgColor="white" color="#e02525" size="lg">
                   {user.name} profile
                 </Button>
               </Link>

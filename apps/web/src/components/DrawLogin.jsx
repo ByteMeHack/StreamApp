@@ -39,7 +39,7 @@ export default function DrawerLogin() {
     <>
       <Button
         ref={btnRef}
-        color="#c23838"
+        color="#e02525"
         bgColor="white"
         onClick={onOpen}
         size="lg"
@@ -80,7 +80,7 @@ export default function DrawerLogin() {
                   type="email"
                   required
                   onChange={(e) => setEmail(e.target.value)}
-                  borderColor="#c23838"
+                  borderColor="#e02525"
                 />
                 <InputGroup>
                   <Input
@@ -88,12 +88,12 @@ export default function DrawerLogin() {
                     type={show ? "text" : "password"}
                     required
                     onChange={(e) => setPass(e.target.value)}
-                    borderColor="#c23838"
+                    borderColor="#e02525"
                   />
                   <InputRightElement width="4.5rem">
                     <Button
                       size="sm"
-                      color="#c23838"
+                      color="#e02525"
                       bgColor="white"
                       onClick={handleClick}
                     >
@@ -118,7 +118,7 @@ export default function DrawerLogin() {
               form="my-form"
               type="submit"
               bgColor="white"
-              textColor="#c23838"
+              textColor="#e02525"
             >
               Login
             </Button>

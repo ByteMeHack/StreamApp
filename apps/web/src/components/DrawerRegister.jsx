@@ -82,14 +82,14 @@ export default function DrawerRegister() {
                   type="text"
                   required
                   onChange={(e) => setName(e.target.value)}
-                  borderColor="#c23838"
+                  borderColor="#e02525"
                 />
                 <Input
                   placeholder="Type your email"
                   type="email"
                   required
                   onChange={(e) => setEmail(e.target.value)}
-                  borderColor="#c23838"
+                  borderColor="#e02525"
                 />
                 <InputGroup>
                   <Input
@@ -97,12 +97,12 @@ export default function DrawerRegister() {
                     type={show ? "text" : "password"}
                     required
                     onChange={(e) => setPass(e.target.value)}
-                    borderColor="#c23838"
+                    borderColor="#e02525"
                   />
                   <InputRightElement width="4.5rem">
                     <Button
                       size="sm"
-                      color="#c23838"
+                      color="#e02525"
                       bgColor="white"
                       onClick={handleClick}
                     >
@@ -125,7 +125,7 @@ export default function DrawerRegister() {
             </Button>
             <Button
               bgColor="white"
-              textColor="#c23838"
+              textColor="#e02525"
               form="my-form"
               type="submit"
             >

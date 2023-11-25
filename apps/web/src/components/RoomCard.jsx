@@ -6,13 +6,19 @@ export default function RoomCard({ id, name }) {
     <Link to={`/rooms/${id}`}>
       <Card
         border="1px"
-        borderColor="#c23838"
+        borderColor="#e02525"
         overflow="hidden"
         borderRadius="lg"
-        width={300}
+        width="fit-content"
         height={356}
       >
-        <Heading padding={3} className="blackBlock" color="#c23838" height={56}>
+        <Heading
+          padding={3}
+          className="blackBlock"
+          color="#e02525"
+          height={56}
+          whiteSpace="nowrap"
+        >
           {name}
         </Heading>
         <Image

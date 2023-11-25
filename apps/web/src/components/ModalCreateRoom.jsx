@@ -33,7 +33,7 @@ export default function ModalCreateRoom() {
 
   return (
     <>
-      <Button mb={3} onClick={onOpen} size="lg" bgColor="white" color="#c23838">
+      <Button mb={3} onClick={onOpen} size="lg" bgColor="white" color="#e02525">
         Create new room
       </Button>
       <Modal
@@ -77,7 +77,7 @@ export default function ModalCreateRoom() {
                   type="text"
                   isRequired
                   onChange={(e) => setName(e.target.value)}
-                  borderColor="#c23838"
+                  borderColor="#e02525"
                 />
                 <Checkbox onChange={(e) => setPrivate(e.target.checked)}>
                   Private room
@@ -89,12 +89,12 @@ export default function ModalCreateRoom() {
                       type={show ? "text" : "password"}
                       isRequired={private_room}
                       onChange={(e) => setPass(e.target.value)}
-                      borderColor="#c23838"
+                      borderColor="#e02525"
                     />
                     <InputRightElement width="4.5rem">
                       <Button
                         size="sm"
-                        color="#c23838"
+                        color="#e02525"
                         bgColor="white"
                         onClick={handleClick}
                       >
@@ -121,7 +121,7 @@ export default function ModalCreateRoom() {
             <Button
               form="my-form"
               type="submit"
-              color="#c23838"
+              color="#e02525"
               bgColor="white"
             >
               Create
