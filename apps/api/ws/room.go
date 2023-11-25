@@ -18,7 +18,7 @@ var conns map[int64]map[int64]*websocket.Conn
 var Repo RoomRepository
 
 func init() {
-	repoRooms, err := Repo.Get(context.Background())
+	repoRooms, err := Repo.Get(context.Background(), "")
 	if err != nil {
 		log.Fatalf("init: couldn't get rooms: %s", err.Error())
 		return
@@ -32,7 +32,7 @@ func init() {
 }
 
 type RoomRepository interface {
-	Get(ctx context.Context) ([]models.Room, error)
+	Get(ctx context.Context, name string) ([]models.Room, error)
 }
 
 var upgrader = websocket.Upgrader{
