@@ -10,25 +10,23 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
-export default function Chat({ room_id }) {
+export default function Chat({ socket }) {
   const [message, setMessage] = useState("");
-  // const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
 
   function sendMessage() {
-    if (socketRef.current)
-      socketRef.current.send(
-        JSON.stringify({
-          message_type: 1,
-          contents: message,
-        })
-      );
+    socket.send(
+      JSON.stringify({
+        message_type: 1,
+        contents: message,
+      })
+    );
   }
-
+  
   useEffect(() => {
-    socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
-    socketRef.current.onmessage = (event) => {
-      console.log(event.data);
+    socket.onmessage = (event) => {
+      setMessages([...messages, event.data]);
     };
   }, []);
 
