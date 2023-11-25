@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Input, Stack } from "@chakra-ui/react";
+import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { getRoomByName } from "../api";
 import RoomCard from "../components/RoomCard";

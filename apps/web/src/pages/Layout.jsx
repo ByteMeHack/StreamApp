@@ -1,4 +1,4 @@
-import { Button, Heading, Image, Stack, VStack } from "@chakra-ui/react";
+import { Button, Heading, Image, Stack} from "@chakra-ui/react";
 import DrawerRegister from "../components/DrawerRegister";
 import { Link, Outlet } from "react-router-dom";
 import DrawerLogin from "../components/DrawLogin";
@@ -32,7 +32,7 @@ export default function Layout() {
           {user ? (
             <>
               <Link to="/rooms/search">
-                <Button colorScheme="red" varinat="link">
+                <Button colorScheme="red" variant="link">
                   Search room
                 </Button>
               </Link>
