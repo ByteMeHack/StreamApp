@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerToRoom } from "../api";
-import {
-  Button,
-  Input,
-  Stack,
-} from "@chakra-ui/react";
+import { Button, Input, Stack } from "@chakra-ui/react";
 
 export default function ModalEnterRoom({ id }) {
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
-  <Stack direction="row" spacing={10} width="50%" placeContent="center">
+  <Stack direction="row" spacing={10} width={300} placeContent="center">
     <Input
       autocomplete="off"
       placeholder="Name of room"
