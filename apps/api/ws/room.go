@@ -116,6 +116,7 @@ func ListenForIncomingMessages(roomId int64, userId int64, conn *websocket.Conn)
 			return
 		}
 		message.UserId = userId
+		message.Timestamp = time.Now().Format("2006-01-02 15:04:05")
 		switch message.Type {
 		case models.LeftMessage:
 			DeleteUserFromRoom(roomId, userId)

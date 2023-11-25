@@ -12,7 +12,8 @@ const (
 )
 
 type Message struct {
-	UserId   int64       `json:"user_id"`
-	Type     MessageType `json:"message_type"`
-	Contents string      `json:"contents"`
+	UserId    int64       `json:"user_id"`
+	Type      MessageType `json:"message_type"`
+	Contents  string      `json:"contents"`
+	Timestamp string      `json:"timestamp"`
 }
