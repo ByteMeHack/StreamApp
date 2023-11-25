@@ -12,8 +12,8 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
-  const messages = [];
 
   function sendMessage() {
     if (socketRef.current)
@@ -26,7 +26,7 @@ export default function Chat({ room_id }) {
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.onmessage = (event) => {
-      messages.push(event.data);
+      setMessages([...messages, event.data]);
     };
   }, []);
 
