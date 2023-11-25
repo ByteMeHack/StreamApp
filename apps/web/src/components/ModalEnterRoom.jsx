@@ -27,10 +27,9 @@ export default function ModalEnterRoom({ id }) {
     />
     <Button
       onClick={async () => {
-        const room = await registerToRoom(id, pass).then((res) => {
-          setRooms(res);
+        await registerToRoom(id, pass).then((res) => {
+          navigate(`/rooms/${res.id}`);
         });
-        navigate(`/rooms/${room.id}`);
       }}
     >
       Enter
