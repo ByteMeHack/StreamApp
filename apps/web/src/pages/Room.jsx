@@ -10,7 +10,7 @@ import {
 import { useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import { useEffect, useState } from "react";
-import { getRoomById } from "../api";
+import { getRoomById, registerToRoom } from "../api";
 
 export default function Room() {
   const id = useParams().id;
