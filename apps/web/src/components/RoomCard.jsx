@@ -12,11 +12,11 @@ export default function RoomCard({ id, name }) {
         width={300}
         height={356}
       >
-        <Heading padding={3} className="blackBlock" color="white" height={56}>
+        <Heading padding={3} className="blackBlock" color="#c23838" height={56}>
           {name}
         </Heading>
         <Image
-          src={`https://cataas.com/cat/says/${name}?fontSize=25&type=square&height=300&width=300&fontColor=red`}
+          src={`https://cataas.com/cat/says/${name}?fontSize=25&type=square&height=300&width=300&fontColor=white`}
           width={300}
           height={300}
           objectFit="cover"

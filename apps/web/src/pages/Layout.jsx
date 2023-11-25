@@ -32,7 +32,6 @@ export default function Layout() {
                 <Button
                   bgColor="white"
                   color="#242424"
-                  bgGradient="linear(to-r, red.400, red.500, red.600)"
                   size="lg"
                 >
                   {user.name} profile

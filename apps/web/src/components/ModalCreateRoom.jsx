@@ -33,14 +33,7 @@ export default function ModalCreateRoom() {
 
   return (
     <>
-      <Button
-        mb={3}
-        onClick={onOpen}
-        size="lg"
-        bgColor="white"
-        color="#242424"
-        bgGradient="linear(to-r, red.400, red.500, red.600)"
-      >
+      <Button mb={3} onClick={onOpen} size="lg" bgColor="white" color="#242424">
         Create new room
       </Button>
       <Modal
@@ -119,7 +112,8 @@ export default function ModalCreateRoom() {
                 onClose();
               }}
               color="#242424"
-              bgColor="white"
+              colorScheme="red"
+              bgGradient="linear(to-r, red.400, red.500, red.600)"
               mr={3}
             >
               Close
@@ -128,8 +122,7 @@ export default function ModalCreateRoom() {
               form="my-form"
               type="submit"
               color="#242424"
-              colorScheme="red"
-              bgGradient="linear(to-r, red.400, red.500, red.600)"
+              bgColor="white"
             >
               Create
             </Button>
