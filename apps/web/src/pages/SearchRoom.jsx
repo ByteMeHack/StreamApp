@@ -8,20 +8,28 @@ export default function SearchRoom() {
   const [room, setRoom] = useState(null);
   const [name, setName] = useState("");
   return (
-    <Stack flexGrow={1} justifyContent="space-evenly">
-      <Input
-        placeholder="Type name of the room"
-        onChange={() => setName(e.target.value)}
-        isRequired
-      />
-      <Button
-        onClick={() => {
-          getRoomByName(name).then((res) => setRoom(res));
-          console.log(room);
-        }}
-      >
-        Search
-      </Button>
+    <Stack
+      flexGrow={1}
+      justifyContent="space-evenly"
+      width="90%"
+      alignItems="center"
+    >
+      <Stack direction="row" spacing={10}>
+        <Input
+          placeholder="Type name of the room"
+          onChange={() => setName(e.target.value)}
+          isRequired
+        />
+        <Button
+          onClick={() => {
+            getRoomByName(name).then((res) => setRoom(res));
+            console.log(room);
+          }}
+        >
+          Search
+        </Button>
+      </Stack>
+
       {room && room.length > 0 ? (
         <Link to={`/rooms/${room.id}`}>
           <RoomCard id={room.id} name={room.name} />
