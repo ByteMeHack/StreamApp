@@ -83,13 +83,11 @@ func ConnectToRoom(c *gin.Context) {
 		conn.WriteJSON(room.Messages[i])
 	}
 	log.Println("ConnectToRoom: all messages sent")
-	ch := make(chan models.Message)
 	go func() {
 		for {
 			var message models.Message
 			conn.ReadJSON(&message)
 			message.UserId = userId
-			ch <- message
 			switch message.Type {
 			case models.LeftMessage:
 				DeleteUserFromRoom(roomId, userId)
