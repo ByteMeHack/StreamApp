@@ -80,62 +80,17 @@ func (u *RoomRepository) Get(ctx context.Context, name string) ([]models.Room, e
 	return rooms, nil
 }
 
-func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, password string) (models.Room, error) {
+func (u *RoomRepository) CheckPassword(ctx context.Context, roomId int64, password string) error {
 	var ent Room
-	err := u.db.WithContext(ctx).Where(&Room{ID: id}).Preload("Users").First(&ent).Error
+	err := u.db.WithContext(ctx).Where(&Room{ID: roomId}).First(&ent).Error
 	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
+		return fmt.Errorf("RoomRepository::CheckPassword: couldn't check password: %w", err)
 	}
-	if ent.Private {
-		err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
-		if err != nil {
-			return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
-		}
-	}
-
-	var user User
-	err = u.db.Model(&User{}).Where("id = ?", userId).First(&user).Error
-
+	err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
 	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
+		return fmt.Errorf("RoomRepository::CheckPassword: couldn't check password: %w", err)
 	}
-	fmt.Println("executing query")
-	ent.Users = append(ent.Users, user)
-	err = u.db.Save(&ent).Error
-	fmt.Printf("error: %v\n", err)
-	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
-	}
-	err = u.db.Model(&ent).Where("id = ?", id).First(&ent).Error
-	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
-	}
-
-	room := RoomEntityToModel(ent)
-	return room, nil
-}
-
-func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, relation string) (models.Room, error) {
-	var user User
-	err := u.db.WithContext(ctx).Model(&User{}).Where("id = ?", userId).First(&user).Error
-	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
-	}
-	var ent Room
-	err = u.db.WithContext(ctx).Where(&Room{ID: roomId}).Preload("Users").First(&ent).Error
-	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
-	}
-	ent.Users = append(ent.Users, user)
-	err = u.db.Save(&ent).Error
-	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
-	}
-	room, err := u.GetByID(ctx, roomId)
-	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::AddUser: couldn't add user to room: %w", err)
-	}
-	return room, nil
+	return nil
 }
 
 // func (u *RoomRepository) ChangeUserPermissions(ctx context.Context, roomId, userId int64) (models.Room, error) {

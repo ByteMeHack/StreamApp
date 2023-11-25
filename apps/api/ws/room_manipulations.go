@@ -12,11 +12,17 @@ func CreateNewRoom(room models.Room) {
 	conns[room.ID] = make(map[int64]*websocket.Conn)
 }
 
-func AddUserToRoom(roomId int64, userId int64) {
+func AddUserToRoom(roomId int64, user models.User) {
 	room := rooms[roomId]
-	room.Users = append(room.Users, models.User{})
+	room.Users = append(room.Users, user)
 	rooms[roomId] = room
-	BroadcastMessageToRoom(roomId, models.Message{UserId: userId, Type: models.JoinedMessage, Contents: fmt.Sprintf("User with id %d joined the room", userId)})
+	BroadcastMessageToRoom(
+		roomId,
+		models.Message{
+			UserId:   user.ID,
+			Type:     models.JoinedMessage,
+			Contents: fmt.Sprintf("User with id %d joined the room", userId),
+		})
 }
 
 func IsUserInTheRoom(roomId int64, userId int64) bool {

@@ -33,8 +33,7 @@ type RoomRepository interface {
 	GetByName(ctx context.Context, name string) (models.Room, error)
 	GetByID(ctx context.Context, id int64) (models.Room, error)
 	Get(ctx context.Context, name string) ([]models.Room, error)
-	AddUser(ctx context.Context, roomId, userId int64, relation string) (models.Room, error)
-	LogIntoRoom(ctx context.Context, id, userId int64, password string) (models.Room, error)
+	CheckPassword(ctx context.Context, roomId int64, password string) error
 }
 
 func NewRoomHandler(repo RoomRepository, userRepo UserRepository) *RoomHandler {
@@ -90,7 +89,7 @@ func (h *RoomHandler) Save(c *gin.Context) {
 		return
 	}
 	ws.CreateNewRoom(room)
-	ws.AddUserToRoom(room.ID, userId)
+	ws.AddUserToRoom(room.ID, user)
 	c.JSON(http.StatusCreated, room)
 }
 
@@ -133,29 +132,35 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to bind room: %s", err.Error())})
 			return
 		}
-
 		enteredPassword := req.Password
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
 			return
 		}
-		room, err := h.repo.LogIntoRoom(ctx, roomId, userId, enteredPassword)
+		err := h.repo.CheckPassword(ctx, roomId, enteredPassword)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
 			return
 		}
-		ws.AddUserToRoom(roomId, userId)
-		c.JSON(http.StatusOK, room)
-	} else {
-
-		room, err := h.repo.AddUser(ctx, roomId, userId, "regular")
-		if err != nil {
-			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
-			return
-		}
-		ws.AddUserToRoom(roomId, userId)
-		c.JSON(http.StatusOK, room)
 	}
+	user, err := h.userRepo.GetByID(ctx, userId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("failed to get user by id: %s", err.Error())})
+		return
+	}
+	room, err := h.repo.GetByID(ctx, roomId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("couldn't get room by id: %s", err.Error())})
+		return
+	}
+	room.Users = append(room.Users, user)
+	room, err = h.repo.Save(ctx, room)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
+		return
+	}
+	ws.AddUserToRoom(roomId, user)
+	c.JSON(http.StatusOK, room)
 }
 
 // ref: https://swaggo.github.io/swaggo.io/declarative_comments_format/api_operation.html
