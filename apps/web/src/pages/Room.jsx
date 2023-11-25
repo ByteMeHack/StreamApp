@@ -3,15 +3,22 @@ import { useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import { useEffect, useState } from "react";
 import { getRoomById } from "../api";
+import ModalEnterRoom from "../components/ModalEnterRoom";
 
 export default function Room() {
   const id = useParams().id;
   const [room, setRoom] = useState(null);
+  const [needPass, setNeedPass] = useState(false);
   useEffect(() => {
-    getRoomById(id).then((res) => setRoom(res));
+    getRoomById(id)
+      .then((res) => setRoom(res))
+      .catch(() => {
+        setNeedPass(true);
+      });
   }, []);
   return (
     <Box className="grayBlock" display="flex" justifyContent="center">
+      <ModalEnterRoom id={id} isOpen={needPass} />
       {room && (
         <Card
           w="90%"
