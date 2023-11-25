@@ -30,8 +30,8 @@ export default function Room() {
         <Stack direction="row" spacing={10} width={300} placeContent="center">
           <Input
             autocomplete="off"
-            placeholder="Name of room"
-            type="text"
+            placeholder="Enter room password"
+            type="password"
             isRequired
             onChange={(e) => setPass(e.target.value)}
             borderColor="#e02525"
