@@ -8,13 +8,8 @@ export default function SearchRoom() {
   const [room, setRoom] = useState(null);
   const [name, setName] = useState("");
   return (
-    <Stack
-      flexGrow={1}
-      justifyContent="space-evenly"
-      width="90%"
-      alignItems="center"
-    >
-      <Stack direction="row" spacing={10}>
+    <Stack flexGrow={1} alignItems="center" width="90%" alignContent="center">
+      <Stack direction="row" spacing={10} minWidth="100%">
         <Input
           placeholder="Type name of the room"
           onChange={() => setName(e.target.value)}
