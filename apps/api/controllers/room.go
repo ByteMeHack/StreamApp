@@ -10,6 +10,7 @@ import (
 
 	"github.com/folklinoff/hack_and_change/dto"
 	"github.com/folklinoff/hack_and_change/models"
+	"github.com/folklinoff/hack_and_change/ws"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -88,6 +89,8 @@ func (h *RoomHandler) Save(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, ErrorMessage{Message: fmt.Sprintf("failed to create room: %s", err.Error())})
 		return
 	}
+	ws.CreateNewRoom(room)
+	ws.AddUserToRoom(room.ID, userId)
 	c.JSON(http.StatusCreated, room)
 }
 
@@ -141,6 +144,7 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
 			return
 		}
+		ws.AddUserToRoom(roomId, userId)
 		c.JSON(http.StatusOK, room)
 	} else {
 
@@ -149,6 +153,7 @@ func (h *RoomHandler) JoinRoom(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, ErrorMessage{Message: fmt.Sprintf("failed to log into room: %s", err.Error())})
 			return
 		}
+		ws.AddUserToRoom(roomId, userId)
 		c.JSON(http.StatusOK, room)
 	}
 }
