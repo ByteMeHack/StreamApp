@@ -17,8 +17,27 @@ export default function Home() {
   }, [user]);
   return (
     <Stack placeItems="center" spacing={15}>
-      <ModalCreateRoom />
-      <RoomsStack rooms={allRooms} />
+      {user ? (
+        <>
+          <ModalCreateRoom />
+          <RoomsStack rooms={allRooms} />
+        </>
+      ) : (
+        <Box textAlign="center" className="grayBlock">
+          <Heading
+            display="inline-block"
+            as="h2"
+            size="2xl"
+            bgGradient="linear(to-r, red.400, red.600)"
+            backgroundClip="text"
+          >
+            Unauthorised
+          </Heading>
+          <Text fontSize="18px" color={"gray.500"} mt={4}>
+            Login or Register to continue
+          </Text>
+        </Box>
+      )}
     </Stack>
   );
 }
