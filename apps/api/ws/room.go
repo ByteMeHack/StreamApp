@@ -78,7 +78,7 @@ func ConnectToRoom(c *gin.Context) {
 	}
 	defer conn.Close()
 	log.Printf("ConnectToRoom: new user joined with id: %d\n", userId)
-
+	conns[roomId][userId] = conn
 	for i := range room.Messages {
 		conn.WriteJSON(room.Messages[i])
 	}
@@ -116,6 +116,9 @@ func BroadcastMessageToRoom(roomId int64, message models.Message) {
 	room := rooms[roomId]
 	for i := range room.Users {
 		conn := conns[roomId][room.Users[i].ID]
+		if conn == nil {
+			continue
+		}
 		conn.WriteJSON(message)
 	}
 }
