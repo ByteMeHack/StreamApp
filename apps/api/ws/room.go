@@ -36,6 +36,7 @@ func Init(db *gorm.DB) {
 
 type RoomRepository interface {
 	Get(ctx context.Context, name string) ([]models.Room, error)
+	Save(ctx context.Context, room models.Room) (models.Room, error)
 }
 
 var upgrader = websocket.Upgrader{
@@ -73,36 +74,19 @@ func ConnectToRoom(c *gin.Context) {
 
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		log.Printf("ConnectToRoom: error occured when connecting to room: %s", err.Error())
+		log.Printf("ConnectToRoom: error occured when connecasdfting to room: %s", err.Error())
 		return
 	}
 	defer conn.Close()
+
 	log.Printf("ConnectToRoom: new user joined with id: %d\n", userId)
 	conns[roomId][userId] = conn
 	for i := range room.Messages {
 		conn.WriteJSON(room.Messages[i])
 	}
 	log.Println("ConnectToRoom: all messages sent")
-	go func() {
-		for {
-			var message models.Message
-			conn.ReadJSON(&message)
-			message.UserId = userId
-			switch message.Type {
-			case models.LeftMessage:
-				DeleteUserFromRoom(roomId, userId)
-			case models.KickMessage:
-				kickedUserId, err := strconv.ParseInt(message.Contents, 10, 64)
-				if err != nil {
-					log.Printf("ConnectToRoom: invalid user id")
-					continue
-				}
-				DeleteUserFromRoom(roomId, kickedUserId)
-			}
-			SaveMessageToRoom(roomId, message)
-			BroadcastMessageToRoom(roomId, message)
-		}
-	}()
+
+	go ListenForIncomingMessages(roomId, userId, conn)
 	for {
 		<-time.After(1 * time.Second)
 		conn.WriteJSON(models.Message{Contents: "Hello, world!"})
@@ -119,5 +103,38 @@ func BroadcastMessageToRoom(roomId int64, message models.Message) {
 			continue
 		}
 		conn.WriteJSON(message)
+	}
+}
+
+func ListenForIncomingMessages(roomId int64, userId int64, conn *websocket.Conn) {
+	for {
+		var message models.Message
+		err := conn.ReadJSON(&message)
+		if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
+			log.Printf("ConnectToRoom: connection closed by user %d", userId)
+			delete(conns[roomId], userId)
+			return
+		}
+		message.UserId = userId
+		switch message.Type {
+		case models.LeftMessage:
+			DeleteUserFromRoom(roomId, userId)
+			Repo.Save(context.Background(), rooms[roomId])
+		case models.KickMessage:
+			if userId != rooms[roomId].OwnerId {
+				log.Printf("ConnectToRoom: user %d is not the owner of the room %d", userId, roomId)
+				continue
+			}
+			kickedUserId, err := strconv.ParseInt(message.Contents, 10, 64)
+			if err != nil {
+				log.Printf("ConnectToRoom: invalid user id")
+				continue
+			}
+			conns[roomId][kickedUserId].Close()
+			DeleteUserFromRoom(roomId, kickedUserId)
+			Repo.Save(context.Background(), rooms[roomId])
+		}
+		SaveMessageToRoom(roomId, message)
+		BroadcastMessageToRoom(roomId, message)
 	}
 }
