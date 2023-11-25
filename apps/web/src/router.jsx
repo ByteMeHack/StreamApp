@@ -5,6 +5,7 @@ import Layout from "./pages/Layout";
 import Profile from "./pages/Profile";
 import Protected from "./components/Protected";
 import NotFound from "./pages/Error";
+import SearchRoom from "./pages/SearchRoom";
 export const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -29,6 +30,14 @@ export const router = createBrowserRouter([
           </Protected>
         ),
         path: "/users/:id",
+      },
+      {
+        element: (
+          <Protected>
+            <SearchRoom />
+          </Protected>
+        ),
+        path: "/rooms/search",
       },
       {
         element: <NotFound />,

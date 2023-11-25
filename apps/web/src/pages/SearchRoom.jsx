@@ -1,5 +1,5 @@
 import { Button, Input, Stack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getRoomByName } from "../api";
 import RoomCard from "../components/RoomCard";
 import { Link } from "react-router-dom";

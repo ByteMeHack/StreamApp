@@ -26,6 +26,11 @@ export default function Layout() {
           <Stack direction="row" spacing={5}>
             <Image src="/vite.svg" width={50} height={50} />
             <Heading className="grayBlock">Stream audio</Heading>
+            <Link to="/rooms/search">
+              <Button colorScheme="red" type="link">
+                Search room
+              </Button>
+            </Link>
           </Stack>
         </Link>
         <Stack direction="row" gap={3}>
