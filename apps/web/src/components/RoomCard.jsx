@@ -18,6 +18,7 @@ export default function RoomCard({ id, name }) {
           color="#e02525"
           height={56}
           whiteSpace="nowrap"
+          overflow="scroll"
         >
           {name}
         </Heading>
