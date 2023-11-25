@@ -17,6 +17,7 @@ export default function SearchRoom() {
       <Button
         onClick={() => {
           getRoomByName(name).then((res) => setRoom(res));
+          console.log(room);
         }}
       >
         Search
