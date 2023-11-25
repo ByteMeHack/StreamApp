@@ -31,7 +31,7 @@ export default function Room() {
   return (
     <Box className="grayBlock" display="flex" justifyContent="center">
       {needPass ? (
-        <>
+        <Stack spacing={5}>
           <Heading
             className="blackBlock"
             color="gray"
@@ -73,7 +73,7 @@ export default function Room() {
               Enter
             </Button>
           </Stack>
-        </>
+        </Stack>
       ) : (
         room && (
           <Card
