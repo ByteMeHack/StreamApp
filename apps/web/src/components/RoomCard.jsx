@@ -17,7 +17,7 @@ export default function RoomCard({ id, name }) {
         <Heading
           padding={3}
           className="blackBlock"
-          color="#2f3235"
+          color="#e02525"
           height={36}
           whiteSpace="nowrap"
           width={300}
