@@ -29,6 +29,7 @@ export default function Chat({ room_id }) {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.addEventListener("message", (event) => {
       setMessages([...messages, event.data]);
+      console.log(messages);
     });
   }, []);
 
@@ -39,17 +40,7 @@ export default function Chat({ room_id }) {
           Chat
         </Heading>
         <CardBody bgColor="gray">
-          <Stack>
-            {messages.map((message) => {
-              return (
-                <Box display="flex">
-                  <Text>User {message.user_id}</Text>
-                  <Text>{message.contents}</Text>
-                  <Text>{new Date(+message.timestamp)}</Text>
-                </Box>
-              );
-            })}
-          </Stack>
+          <Stack></Stack>
           <Stack direction="row" spacing={3}>
             <Input
               placeholder="Type message here..."
