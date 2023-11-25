@@ -81,6 +81,11 @@ func ConnectToRoom(c *gin.Context) {
 
 	log.Printf("ConnectToRoom: new user joined with id: %d\n", userId)
 	conns[roomId][userId] = conn
+	err = conn.ReadJSON(&models.Message{})
+	if err != nil {
+		log.Printf("ConnectToRoom: error occured when reading message: %s", err.Error())
+		return
+	}
 	for i := range room.Messages {
 		conn.WriteJSON(room.Messages[i])
 	}
@@ -89,7 +94,7 @@ func ConnectToRoom(c *gin.Context) {
 	go ListenForIncomingMessages(roomId, userId, conn)
 	for {
 		<-time.After(1 * time.Second)
-		conn.WriteJSON(models.Message{Contents: "Hello, world!"})
+		conn.WriteJSON(models.Message{Contents: "Hello, world!", Timestamp: time.Now().Format("2006-01-02 15:04:05")})
 		time.Sleep(1 * time.Second)
 	}
 }
@@ -134,6 +139,8 @@ func ListenForIncomingMessages(roomId int64, userId int64, conn *websocket.Conn)
 			conns[roomId][kickedUserId].Close()
 			DeleteUserFromRoom(roomId, kickedUserId)
 			Repo.Save(context.Background(), rooms[roomId])
+		case models.RegularMessage:
+
 		}
 		SaveMessageToRoom(roomId, message)
 		BroadcastMessageToRoom(roomId, message)
