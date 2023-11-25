@@ -17,7 +17,10 @@ export default function SearchRoom() {
         />
         <Button
           onClick={() => {
-            getRoomByName(name).then((res) => setRoom(res[0]));
+            getRoomByName(name).then((res) => {
+              setRoom(res[0]);
+              console.log(res);
+            });
             console.log(room);
           }}
         >
