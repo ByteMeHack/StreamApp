@@ -74,3 +74,11 @@ export async function getRoomByName(name) {
     return response.data;
   });
 }
+
+export async function registerToRoom(id, password) {
+  return instance
+    .post(`/rooms/${id}`, { password: password })
+    .then(function (response) {
+      return response.data;
+    });
+}

@@ -37,7 +37,7 @@ export default function ModalCreateRoom() {
         mb={3}
         onClick={onOpen}
         size="lg"
-        colorScheme="red"
+        bgColor="white"
         color="#242424"
         bgGradient="linear(to-r, red.400, red.500, red.600)"
       >

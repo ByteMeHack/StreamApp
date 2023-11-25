@@ -106,15 +106,19 @@ export default function DrawerLogin() {
           </DrawerBody>
 
           <DrawerFooter className="blackBlock">
-            <Button bgColor="white" mr={3} onClick={onClose}>
+            <Button
+              colorScheme="red"
+              textColor="black"
+              mr={3}
+              onClick={onClose}
+            >
               Cancel
             </Button>
             <Button
               form="my-form"
               type="submit"
-              colorScheme="red"
-              color="#242424"
-              bgGradient="linear(to-r, red.400, red.500, red.600)"
+              bgColor="white"
+              textColor="black"
             >
               Login
             </Button>

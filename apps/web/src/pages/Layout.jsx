@@ -30,7 +30,7 @@ export default function Layout() {
             <>
               <Link to={`/users/${user.id}`}>
                 <Button
-                  colorScheme="red"
+                  bgColor="white"
                   color="#242424"
                   bgGradient="linear(to-r, red.400, red.500, red.600)"
                   size="lg"
@@ -39,7 +39,7 @@ export default function Layout() {
                 </Button>
               </Link>
               <Button
-                bgColor="white"
+                colorScheme="red"
                 color="#242424"
                 onClick={() => {
                   logoutReq();

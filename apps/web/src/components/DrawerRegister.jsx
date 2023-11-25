@@ -115,11 +115,16 @@ export default function DrawerRegister() {
           </DrawerBody>
 
           <DrawerFooter className="blackBlock">
-            <Button bgColor="white" mr={3} onClick={onClose}>
+            <Button
+              colorScheme="red"
+              textColor="black"
+              mr={3}
+              onClick={onClose}
+            >
               Cancel
             </Button>
             <Button
-              colorScheme="red"
+              bgColor="white"
               textColor="black"
               form="my-form"
               type="submit"
