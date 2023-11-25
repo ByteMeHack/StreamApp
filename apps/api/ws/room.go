@@ -3,6 +3,7 @@ package ws
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -16,6 +17,10 @@ var rooms map[int64]models.Room
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		log.Println("CheckOrigin: ", r.Header.Get("Origin"))
+		return true
+	},
 }
 
 func ConnectToRoom(c *gin.Context) {
