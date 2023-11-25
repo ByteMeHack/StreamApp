@@ -1,4 +1,12 @@
-import { Box, Button, CardBody, Heading, Input, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  Heading,
+  Input,
+  Stack,
+} from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function Chat({ room_id }) {
