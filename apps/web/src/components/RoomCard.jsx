@@ -25,6 +25,7 @@ export default function RoomCard({ id, name }) {
           {name}
         </Heading>
         <Image
+          bgColor="#e02525"
           fallback={
             <Spinner
               bgColor="#2f3235"
