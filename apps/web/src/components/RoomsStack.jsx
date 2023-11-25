@@ -1,11 +1,8 @@
-import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import RoomCard from "./RoomCard";
-import { useSelector } from "react-redux";
-import { userSelector } from "../store/selectors";
 import { useState } from "react";
 
 export default function RoomsStack({ rooms }) {
-  const user = useSelector(userSelector);
   const [currButton, setButton] = useState(1);
   let buttons = [],
     index = 1;
