@@ -87,7 +87,8 @@ func ConnectToRoom(c *gin.Context) {
 	go func() {
 		for {
 			var message models.Message
-			conn.ReadJSON(message)
+			conn.ReadJSON(&message)
+			message.UserId = userId
 			ch <- message
 			switch message.Type {
 			case models.LeftMessage:

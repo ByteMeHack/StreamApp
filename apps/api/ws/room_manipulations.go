@@ -1,6 +1,8 @@
 package ws
 
 import (
+	"fmt"
+
 	"github.com/folklinoff/hack_and_change/models"
 	"github.com/gorilla/websocket"
 )
@@ -13,8 +15,8 @@ func CreateNewRoom(room models.Room) {
 func AddUserToRoom(roomId int64, userId int64) {
 	room := rooms[roomId]
 	room.Users = append(room.Users, models.User{})
-	// rooms[roomId].Users = append(rooms[roomId].Users)
 	rooms[roomId] = room
+	BroadcastMessageToRoom(roomId, models.Message{UserId: userId, Type: models.JoinedMessage, Contents: fmt.Sprintf("User with id %d joined the room", userId)})
 }
 
 func IsUserInTheRoom(roomId int64, userId int64) bool {
