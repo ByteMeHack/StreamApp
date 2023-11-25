@@ -102,7 +102,7 @@ export default function DrawerRegister() {
                   <InputRightElement width="4.5rem">
                     <Button
                       size="sm"
-                      color="#242424"
+                      color="#c23838"
                       bgColor="white"
                       onClick={handleClick}
                     >
@@ -125,7 +125,7 @@ export default function DrawerRegister() {
             </Button>
             <Button
               bgColor="white"
-              textColor="black"
+              textColor="#c23838"
               form="my-form"
               type="submit"
             >

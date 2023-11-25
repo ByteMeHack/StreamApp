@@ -33,7 +33,7 @@ export default function ModalCreateRoom() {
 
   return (
     <>
-      <Button mb={3} onClick={onOpen} size="lg" bgColor="white" color="#242424">
+      <Button mb={3} onClick={onOpen} size="lg" bgColor="white" color="#c23838">
         Create new room
       </Button>
       <Modal
@@ -94,7 +94,7 @@ export default function ModalCreateRoom() {
                     <InputRightElement width="4.5rem">
                       <Button
                         size="sm"
-                        color="#242424"
+                        color="#c23838"
                         bgColor="white"
                         onClick={handleClick}
                       >
@@ -121,7 +121,7 @@ export default function ModalCreateRoom() {
             <Button
               form="my-form"
               type="submit"
-              color="#242424"
+              color="#c23838"
               bgColor="white"
             >
               Create

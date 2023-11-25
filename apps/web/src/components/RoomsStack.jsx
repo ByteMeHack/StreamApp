@@ -38,6 +38,8 @@ export default function RoomsStack() {
             {buttons.map((button, index) => {
               return (
                 <Button
+                  colorScheme="red"
+                  bgGradient="linear(to-r, red.400, red.500, red.600)"
                   key={button}
                   onClick={() => {
                     setButton(button);

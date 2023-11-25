@@ -29,11 +29,7 @@ export default function Layout() {
           {user ? (
             <>
               <Link to={`/users/${user.id}`}>
-                <Button
-                  bgColor="white"
-                  color="#242424"
-                  size="lg"
-                >
+                <Button bgColor="white" color="#c23838" size="lg">
                   {user.name} profile
                 </Button>
               </Link>

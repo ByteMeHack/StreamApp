@@ -39,7 +39,7 @@ export default function DrawerLogin() {
     <>
       <Button
         ref={btnRef}
-        color="#242424"
+        color="#c23838"
         bgColor="white"
         onClick={onOpen}
         size="lg"
@@ -93,7 +93,7 @@ export default function DrawerLogin() {
                   <InputRightElement width="4.5rem">
                     <Button
                       size="sm"
-                      color="#242424"
+                      color="#c23838"
                       bgColor="white"
                       onClick={handleClick}
                     >
@@ -117,7 +117,7 @@ export default function DrawerLogin() {
             <Button
               form="my-form"
               type="submit"
-              bgColor="white"
+              bgColor="#c23838"
               textColor="black"
             >
               Login
