@@ -53,17 +53,22 @@ func main() {
 		log.Fatalf("couldn't setup join table for users: %s", err.Error())
 	}
 
+	ws.Init(db)
+
 	e := gin.Default()
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	e.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "We gucci"})
 	})
 	e.GET("/room/:id", handlers.CORSMiddleware(), handlers.CheckAuthToken, ws.ConnectToRoom)
+
 	e.Use(handlers.CORSMiddleware())
+
 	userHandler := composites.NewUserComposite(db)
 	userHandler.Register(e)
 	roomHandler := composites.NewRoomComposite(db)
 	roomHandler.Register(e)
+
 	go func() {
 		log.Printf("server started on port :%s", config.Cfg.Port)
 		err := http.ListenAndServe(fmt.Sprintf(":%s", config.Cfg.Port), e)

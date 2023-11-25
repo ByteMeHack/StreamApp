@@ -8,8 +8,10 @@ import (
 	"time"
 
 	"github.com/folklinoff/hack_and_change/models"
+	"github.com/folklinoff/hack_and_change/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"gorm.io/gorm"
 )
 
 var rooms map[int64]models.Room
@@ -17,7 +19,8 @@ var conns map[int64]map[int64]*websocket.Conn
 
 var Repo RoomRepository
 
-func init() {
+func Init(db *gorm.DB) {
+	Repo = repository.NewRoomRepository(db)
 	repoRooms, err := Repo.Get(context.Background(), "")
 	if err != nil {
 		log.Fatalf("init: couldn't get rooms: %s", err.Error())
