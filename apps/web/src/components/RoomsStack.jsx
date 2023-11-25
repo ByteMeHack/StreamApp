@@ -42,7 +42,7 @@ export default function RoomsStack() {
             {buttons.map((button, index) => {
               return (
                 <Button
-                  disabled={currButton === button}
+                  isDisabled={currButton === button}
                   colorScheme="red"
                   bgGradient="linear(to-r, red.400, red.500, red.600)"
                   key={button}
