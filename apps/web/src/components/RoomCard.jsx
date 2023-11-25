@@ -12,6 +12,7 @@ export default function RoomCard({ id, name }) {
         width={300}
         height={336}
         alignItems="center"
+        bgColor="#e02525"
       >
         <Heading
           padding={3}
