@@ -22,6 +22,7 @@ export default function SearchRoom() {
               console.log(res);
             });
             console.log(room);
+            console.log(name);
           }}
         >
           Search

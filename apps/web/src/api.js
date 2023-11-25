@@ -70,9 +70,11 @@ export async function getRoomById(id) {
 }
 
 export async function getRoomByName(name) {
-  return instance.get(`/rooms?name=${name}`).then(function (response) {
-    return response.data;
-  });
+  return instance
+    .get("/rooms", { params: { name: name } })
+    .then(function (response) {
+      return response.data;
+    });
 }
 
 export async function registerToRoom(id, password) {
