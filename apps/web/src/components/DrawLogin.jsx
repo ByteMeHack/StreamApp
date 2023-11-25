@@ -117,8 +117,8 @@ export default function DrawerLogin() {
             <Button
               form="my-form"
               type="submit"
-              bgColor="#c23838"
-              textColor="black"
+              bgColor="white"
+              textColor="#c23838"
             >
               Login
             </Button>
