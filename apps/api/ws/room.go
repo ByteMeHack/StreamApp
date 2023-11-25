@@ -29,6 +29,7 @@ func ConnectToRoom(c *gin.Context) {
 
 	userId := c.Request.Header.Get("XUserID")
 	c.Request.Header.Set("Connection", "Upgrade")
+	c.Request.Header.Set("Upgrade", "Websocket")
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Printf("ConnectToRoom: error occured when connecting to room: %s", err.Error())
