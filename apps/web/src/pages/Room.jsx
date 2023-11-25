@@ -50,3 +50,4 @@ export default function Room() {
     </Box>
   );
 }
+Room.displayName = "Room";
