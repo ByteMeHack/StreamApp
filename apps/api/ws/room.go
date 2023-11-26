@@ -79,17 +79,6 @@ func ConnectToRoom(c *gin.Context) {
 	connDoneCh := make(chan bool)
 	defer conn.Close()
 	// In case user leaves the site without closing the connection
-	go func() {
-		<-c.Request.Context().Done()
-		connDoneCh <- true
-	}()
-
-	// In case user closes the connection
-	go func() {
-		<-connDoneCh
-		conn.Close()
-		delete(conns[roomId], userId)
-	}()
 
 	log.Printf("ConnectToRoom: new user joined with id: %d\n", userId)
 	conns[roomId][userId] = conn
@@ -110,19 +99,36 @@ func ConnectToRoom(c *gin.Context) {
 	go ListenForIncomingMessages(connDoneCh, roomId, userId)
 
 	// Test messages
-	for {
-		select {
-		case <-connDoneCh:
-			return
-		default:
-			conn.WriteJSON(
-				models.Message{
-					Contents:  "Hello, world!",
-					Timestamp: time.Now().Format("2006-01-02 15:04:05"),
-				})
-			time.Sleep(5 * time.Second)
+	go func() {
+		for {
+			select {
+			case <-connDoneCh:
+				return
+			default:
+				conn.WriteJSON(
+					models.Message{
+						Contents:  "Hello, world!",
+						Timestamp: time.Now().Format("2006-01-02 15:04:05"),
+					})
+				time.Sleep(5 * time.Second)
+			}
 		}
-	}
+	}()
+	go func() {
+		<-c.Request.Context().Done()
+		connDoneCh <- true
+	}()
+
+	// In case user closes the connection
+	go func() {
+		<-connDoneCh
+		conn.Close()
+		delete(conns[roomId], userId)
+		log.Println("deleted connection")
+	}()
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+	defer cancel()
+	<-ctx.Done()
 }
 
 func BroadcastMessageToRoom(roomId int64, message models.Message) {

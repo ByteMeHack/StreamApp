@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,6 +9,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/folklinoff/hack_and_change/composites"
 	"github.com/folklinoff/hack_and_change/config"
 	handlers "github.com/folklinoff/hack_and_change/controllers"
@@ -62,7 +66,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "We gucci"})
 	})
 	e.GET("/room/:id", handlers.CORSMiddleware(), handlers.CheckAuthToken, ws.ConnectToRoom)
-
+	// client := NewAwsClient()
 	e.Use(handlers.CORSMiddleware())
 
 	userHandler := composites.NewUserComposite(db)
@@ -81,4 +85,27 @@ func main() {
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt, syscall.SIGTERM)
 	<-ch
+}
+
+func NewAwsClient() *s3.Client {
+	// Создаем кастомный обработчик эндпоинтов, который для сервиса S3 и региона ru-central1 выдаст корректный URL
+	customResolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+		if service == s3.ServiceID && region == "ru-central1" {
+			return aws.Endpoint{
+				PartitionID:   "yc",
+				URL:           "https://storage.yandexcloud.net",
+				SigningRegion: "ru-central1",
+			}, nil
+		}
+		return aws.Endpoint{}, fmt.Errorf("unknown endpoint requested")
+	})
+
+	awsCfg, err := awsConfig.LoadDefaultConfig(context.TODO(), awsConfig.WithEndpointResolverWithOptions(customResolver))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Создаем клиента для доступа к хранилищу S3
+	client := s3.NewFromConfig(awsCfg)
+	return client
 }
