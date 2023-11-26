@@ -55,7 +55,13 @@ export default function Chat({ room_id }) {
             onChange={(e) => setMessage(e.target.value)}
             value={message}
           />
-          <Button isDisabled={connection} onClick={sendMessage}>
+          <Button
+            isDisabled={connection}
+            onClick={() => {
+              console.log(messages);
+              sendMessage();
+            }}
+          >
             Send
           </Button>
         </Stack>
