@@ -32,7 +32,12 @@ export default function Room() {
       });
   }, []);
   return (
-    <Box className="grayBlock" display="flex" justifyContent="center">
+    <Box
+      className="grayBlock"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
       {needPass ? (
         <Stack spacing={5}>
           <Heading color="red" size="lg">

@@ -48,7 +48,7 @@ export default function Chat({ room_id }) {
 
   return (
     <Box className="blackBlock" p={3}>
-      <Stack width="50%">
+      <Stack maxWidth={300}>
         <Heading size="sm" color="white" className="grayblock">
           Chat
         </Heading>

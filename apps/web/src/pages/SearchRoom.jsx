@@ -16,7 +16,7 @@ export default function SearchRoom() {
       alignItems="center"
       spacing={5}
     >
-      <Stack direction="row" spacing={10} width="50%" placeContent="center">
+      <Stack direction="row" spacing={10} width="50%" placeContent="center" className="searchRoom">
         <Input
           placeholder="Type name of the room"
           onChange={(e) => setName(e.target.value)}
