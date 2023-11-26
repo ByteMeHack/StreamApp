@@ -1,5 +1,19 @@
 basePath: /api
 definitions:
+  dto.CreateRoomRequestDTO:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      private:
+        type: boolean
+    type: object
+  dto.JoinRoomRequestDTO:
+    properties:
+      password:
+        type: string
+    type: object
   dto.LoginRequestDTO:
     properties:
       email:
@@ -215,7 +229,7 @@ paths:
         name: room
         required: true
         schema:
-          $ref: '#/definitions/models.Room'
+          $ref: '#/definitions/dto.CreateRoomRequestDTO'
       - description: Authorization token
         in: header
         name: Set-Cookie
@@ -284,6 +298,11 @@ paths:
         name: Set-Cookie
         required: true
         type: string
+      - description: Room with password
+        in: body
+        name: password
+        schema:
+          $ref: '#/definitions/dto.JoinRoomRequestDTO'
       produces:
       - application/json
       responses:

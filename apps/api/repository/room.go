@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/folklinoff/hack_and_change/models"
@@ -71,10 +70,9 @@ func (u *RoomRepository) GetByID(ctx context.Context, id int64) (models.Room, er
 	room := RoomEntityToModel(ent)
 	return room, nil
 }
-
-func (u *RoomRepository) Get(ctx context.Context) ([]models.Room, error) {
+func (u *RoomRepository) Get(ctx context.Context, name string) ([]models.Room, error) {
 	var ents []Room
-	err := u.db.WithContext(ctx).Model(&Room{}).Preload("Users").Find(&ents).Error
+	err := u.db.WithContext(ctx).Model(&Room{}).Preload("Users").Where("lower(name) LIKE lower(?)", "%"+name+"%").Find(&ents).Error
 	if err != nil {
 		return []models.Room{}, fmt.Errorf("RoomRepository::Get: couldn't get all rooms: %w", err)
 	}
@@ -82,40 +80,17 @@ func (u *RoomRepository) Get(ctx context.Context) ([]models.Room, error) {
 	return rooms, nil
 }
 
-func (u *RoomRepository) LogIntoRoom(ctx context.Context, id, userId int64, password string) (models.Room, error) {
+func (u *RoomRepository) CheckPassword(ctx context.Context, roomId int64, password string) error {
 	var ent Room
-	err := u.db.WithContext(ctx).Where(&Room{ID: id}).Preload("Users").First(&ent).Error
+	err := u.db.WithContext(ctx).Where(&Room{ID: roomId}).First(&ent).Error
 	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
+		return fmt.Errorf("RoomRepository::CheckPassword: couldn't check password: %w", err)
 	}
-	if ent.Private {
-		err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
-		if err != nil {
-			return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
-		}
-	}
-
-	var user User
-	err = u.db.Model(&User{ID: userId}).First(&user).Error
+	err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
 	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
+		return fmt.Errorf("RoomRepository::CheckPassword: couldn't check password: %w", err)
 	}
-	log.Printf("User %+v attempting to join a room ", user)
-	err = u.db.Model(&ent).Association("Users").Append(&user)
-	// err = u.db.WithContext(ctx).Save(&room).Error
-	if err != nil {
-		return models.Room{}, fmt.Errorf("RoomRepository::LogIntoRoom: couldn't log into room: %w", err)
-	}
-	room := RoomEntityToModel(ent)
-	return room, nil
-}
-
-func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, relation string) error {
-	return u.db.
-		WithContext(ctx).
-		Where(&Room{ID: roomId}).
-		Association("Users").
-		Append(&UserRoom{UserID: userId, RoomID: roomId, Relation: relation, CreatedTime: time.Now()})
+	return nil
 }
 
 // func (u *RoomRepository) ChangeUserPermissions(ctx context.Context, roomId, userId int64) (models.Room, error) {
@@ -127,7 +102,6 @@ func (u *RoomRepository) AddUser(ctx context.Context, roomId, userId int64, rela
 
 func RoomModelToEntity(r models.Room) (Room, error) {
 	hashedPassword, err := hashing.GeneratePasswordHash(r.Password)
-	log.Println("Hashed password: ", hashedPassword, r.Password)
 	if err != nil {
 		return Room{}, fmt.Errorf("RoomModelToEntity: couldn't convert Room model to entity: %w", err)
 	}

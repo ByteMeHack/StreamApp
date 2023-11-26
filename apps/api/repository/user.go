@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/folklinoff/hack_and_change/models"
 	"github.com/folklinoff/hack_and_change/pkg/hashing"
@@ -54,7 +53,7 @@ func (u *UserRepository) GetByMail(ctx context.Context, mail string) (models.Use
 
 func (u *UserRepository) GetByID(ctx context.Context, id int64) (models.User, error) {
 	var ent User
-	err := u.db.WithContext(ctx).Where(&User{ID: id}).First(&ent).Error
+	err := u.db.WithContext(ctx).Where("id = ?", id).First(&ent).Error
 	if err != nil {
 		return models.User{}, fmt.Errorf("UserRepository::GetByID: couldn't get user id: %w", err)
 	}
@@ -70,7 +69,6 @@ func (u *UserRepository) LoginUserByMail(ctx context.Context, mail string, passw
 	}
 	err = hashing.CompareHashAndPassword(password, ent.HashedPassword)
 	if err != nil {
-		log.Println("Given password: ", password, "; User: ", mail)
 		return models.User{}, fmt.Errorf("UserRepository::LoginUserByMail: couldn't login user: password is incorrect: %w", err)
 	}
 	user := userEntityToModel(ent)
@@ -92,7 +90,6 @@ func (u *UserRepository) GetUserRooms(ctx context.Context, id int64) ([]models.R
 
 func userModelToEntity(u models.User) (User, error) {
 	hashedPassword, err := hashing.GeneratePasswordHash(u.Password)
-	log.Println("Hashed password: ", hashedPassword, u.Password)
 	if err != nil {
 		return User{}, fmt.Errorf("userModelToEntity: couldn't convert user model to entity: %w", err)
 	}
