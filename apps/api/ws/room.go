@@ -107,7 +107,7 @@ func ConnectToRoom(c *gin.Context) {
 	}
 	log.Println("ConnectToRoom: all messages sent")
 
-	go ListenForIncomingMessages(connDoneCh, roomId, userId, conn)
+	go ListenForIncomingMessages(connDoneCh, roomId, userId)
 
 	// Test messages
 	for {
@@ -128,6 +128,7 @@ func ConnectToRoom(c *gin.Context) {
 func BroadcastMessageToRoom(roomId int64, message models.Message) {
 	room := rooms[roomId]
 	for i := range room.Users {
+		log.Printf("BroadcastMessageToRoom: sending message to user %d", room.Users[i].ID)
 		conn := conns[roomId][room.Users[i].ID]
 		if conn == nil {
 			continue
@@ -136,8 +137,12 @@ func BroadcastMessageToRoom(roomId int64, message models.Message) {
 	}
 }
 
-func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64, conn *websocket.Conn) {
+func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64) {
 	for {
+		conn := conns[roomId][userId]
+		if conn == nil {
+			return
+		}
 		var message models.Message
 		err := conn.ReadJSON(&message)
 		defer func() {
@@ -145,7 +150,7 @@ func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64,
 				log.Printf("ListenForIncomingMessages: error occured when reading message: %s", err)
 			}
 		}()
-		log.Printf("read message: %s", message)
+		log.Printf("read message: %+v", message)
 		if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
 			connDoneCh <- true
 			return
