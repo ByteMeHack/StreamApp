@@ -9,10 +9,11 @@ export default function Message({ message }) {
       width={300}
       height={100}
       bgColor="gray"
+      borderRadius={10}
     >
-      <Text>User: {message.user_id}</Text>
-      <Text>Message: {message.contents}</Text>
-      <Text>Date:{message.timestamp}</Text>
+      <Text color="black">User: {message.user_id}</Text>
+      <Text color="black">Message: {message.contents}</Text>
+      <Text color="black">Date:{message.timestamp}</Text>
     </Stack>
   );
 }
