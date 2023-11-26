@@ -36,5 +36,13 @@
   .searchRoom {
     width: 90%;
   }
-  
+
+}
+
+.leftNav {
+  flex-direction: row;
+}
+
+.searchRoom {
+  width: 50%;
 }

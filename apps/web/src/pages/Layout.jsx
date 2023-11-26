@@ -28,12 +28,7 @@ export default function Layout() {
             <Heading className="grayBlock">Stream audio</Heading>
           </Stack>
         </Link>
-        <Stack
-          direction="row"
-          spacing={5}
-          alignItems="center"
-          className="leftNav"
-        >
+        <Stack spacing={5} alignItems="center" className="leftNav">
           {user ? (
             <>
               <Link to="/rooms/search">
