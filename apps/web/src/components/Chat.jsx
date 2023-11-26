@@ -4,7 +4,7 @@ import Message from "./Message";
 
 export default function Chat({ room_id }) {
   const [messages, setMessages] = useState([]);
-  const message = "";
+  let message = "";
   const socketRef = useRef(null);
   function sendMessage() {
     if (socketRef.current)
