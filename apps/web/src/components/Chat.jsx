@@ -26,10 +26,7 @@ export default function Chat({ room_id }) {
     }
 
     const listenMessage = (event) => {
-      setMessages((messages) => {
-        console.log(messages);
-        messages.concat(JSON.parse(event.data));
-      });
+      setMessages((messages) => messages.concat(JSON.parse(event.data)));
     };
     socketRef.current.addEventListener("message", listenMessage);
     return function () {
