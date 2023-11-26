@@ -23,10 +23,7 @@ export default function Layout() {
     <Stack className="grayBlock" flexGrow={1}>
       <Stack direction="row" p={5} justifyContent="space-between">
         <Link to="/">
-          <Stack direction="row" spacing={5}>
-            <Image src="/vite.svg" width={50} height={50} />
-            <Heading className="grayBlock">Stream audio</Heading>
-          </Stack>
+          <Heading className="grayBlock">Stream audio</Heading>
         </Link>
         <Stack
           spacing={5}

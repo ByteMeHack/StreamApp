@@ -35,12 +35,10 @@ export default function Room() {
     <Box
       className="grayBlock"
       display="flex"
-      justifyContent="center"
-      alignItems="center"
     >
       {needPass ? (
         <Stack spacing={5}>
-          <Heading color="red" size="lg">
+          <Heading color="red" size="lg" alignItems="center">
             This room is private. Write a password to enter
           </Heading>
           <Stack
