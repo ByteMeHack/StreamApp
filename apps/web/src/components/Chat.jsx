@@ -21,9 +21,10 @@ export default function Chat({ room_id }) {
 
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
-    socketRef.current.onopen = function () {
+    if (socketRef.current.readyState == WebSocket.OPEN) {
       setConnection(true);
-    };
+    }
+
     const listenMessage = (event) => {
       setMessages((messages) => messages.concat(JSON.parse(event.data)));
     };
