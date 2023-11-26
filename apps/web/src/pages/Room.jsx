@@ -32,22 +32,13 @@ export default function Room() {
       });
   }, []);
   return (
-    <Box
-      className="grayBlock"
-      display="flex"
-    >
+    <Box className="grayBlock" display="flex">
       {needPass ? (
-        <Stack spacing={5}>
-          <Heading color="red" size="lg" alignItems="center">
+        <Stack spacing={5} alignItems="center">
+          <Heading color="red" size="lg">
             This room is private. Write a password to enter
           </Heading>
-          <Stack
-            direction="row"
-            spacing={10}
-            width={300}
-            placeContent="center"
-            placeItems="center"
-          >
+          <Stack direction="row" spacing={10} width={300} alignItems="center">
             <InputGroup>
               <Input
                 placeholder="Type your password"
