@@ -6,9 +6,9 @@ import {
   Heading,
   Input,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import Message from "./Message";
 
 export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
@@ -29,7 +29,6 @@ export default function Chat({ room_id }) {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.addEventListener("message", (event) => {
       setMessages([...messages, event.data]);
-      console.log(messages);
     });
   }, []);
 
@@ -40,7 +39,11 @@ export default function Chat({ room_id }) {
           Chat
         </Heading>
         <CardBody bgColor="gray">
-          <Stack></Stack>
+          <Stack>
+            {messages.map((message) => {
+              return <Message message={message} />;
+            })}
+          </Stack>
           <Stack direction="row" spacing={3}>
             <Input
               placeholder="Type message here..."
