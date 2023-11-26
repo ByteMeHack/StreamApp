@@ -1,7 +1,6 @@
 import { Stack, Text } from "@chakra-ui/react";
 
 export default function Message({ message }) {
-  console.log(message);
   return (
     <Stack
       gap={5}

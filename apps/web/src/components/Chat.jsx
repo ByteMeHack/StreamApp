@@ -28,7 +28,7 @@ export default function Chat({ room_id }) {
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.addEventListener("message", (event) => {
-      setMessages([...messages, event.data]);
+      setMessages([...messages, JSON.parse(event.data)]);
     });
   }, []);
 
@@ -40,6 +40,7 @@ export default function Chat({ room_id }) {
         </Heading>
         <Stack>
           {messages.map((message) => {
+            console.log(messages);
             return <Message message={message} />;
           })}
         </Stack>
