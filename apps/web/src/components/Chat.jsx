@@ -1,7 +1,6 @@
 import { Box, Button, Heading, Input, Stack } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
-import { useSelector } from "react-redux";
 
 export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
@@ -44,7 +43,7 @@ export default function Chat({ room_id }) {
 
   return (
     <Box className="blackBlock" p={3}>
-      <Stack>
+      <Stack width="50%">
         <Heading size="sm" color="white" className="grayblock">
           Chat
         </Heading>
