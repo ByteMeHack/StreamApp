@@ -30,7 +30,6 @@ export default function Chat({ room_id }) {
     socketRef.current.addEventListener("message", listenMessage);
     return function () {
       socketRef.current.removeEventListener("message", listenMessage);
-      socketRef.current.removeEventListener("open", connectToSocket);
       socketRef.current.close();
     };
   }, []);
