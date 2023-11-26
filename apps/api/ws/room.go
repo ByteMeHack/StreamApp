@@ -132,6 +132,7 @@ func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64)
 	for {
 		conn := conns[roomId][userId]
 		if conn == nil {
+			connDoneCh <- true
 			return
 		}
 		var message models.Message
