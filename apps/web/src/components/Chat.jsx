@@ -35,7 +35,7 @@ export default function Chat({ room_id }) {
         <Heading size="sm" color="white" className="grayblock">
           Chat
         </Heading>
-        <Stack overflow="scroll" height="50rem">
+        <Stack overflow="scroll" maxHeight="30rem">
           {messages.map((message) => {
             return <Message key={message.contents} message={message} />;
           })}
