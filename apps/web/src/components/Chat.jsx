@@ -67,6 +67,7 @@ export default function Chat({ room_id }) {
                   contents: "Entering room",
                 })
               );
+              setPending(false);
             }}
           >
             Connect
