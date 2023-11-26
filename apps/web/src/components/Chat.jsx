@@ -7,6 +7,11 @@ export default function Chat({ room_id }) {
   const [messages, setMessages] = useState([]);
   const [connection, setConnection] = useState(false);
 
+  useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   const socketRef = useRef(null);
 
   function sendMessage() {
@@ -41,7 +46,7 @@ export default function Chat({ room_id }) {
         <Heading size="sm" color="white" className="grayblock">
           Chat
         </Heading>
-        <Stack overflow="scroll" maxHeight="30rem">
+        <Stack overflow="scroll" maxHeight="30rem" ref={bottomRef}>
           {messages.map((message) => {
             return <Message key={message.contents} message={message} />;
           })}
