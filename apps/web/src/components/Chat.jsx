@@ -58,28 +58,32 @@ export default function Chat({ room_id }) {
           })}
           <div ref={bottomRef} />
         </Stack>
-        <Button
-          onClick={() => {
-            socketRef.current.send(
-              JSON.stringify({
-                message_type: 0,
-                contents: "Entering room",
-              })
-            );
-          }}
-        >
-          Connect
-        </Button>
-        <Stack direction="row" spacing={3}>
-          <Input
-            placeholder="Type message here..."
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-          />
-          <Button isDisabled={connection} onClick={sendMessage}>
-            Send
+        {pending && (
+          <Button
+            onClick={() => {
+              socketRef.current.send(
+                JSON.stringify({
+                  message_type: 0,
+                  contents: "Entering room",
+                })
+              );
+            }}
+          >
+            Connect
           </Button>
-        </Stack>
+        )}
+        {!pending && (
+          <Stack direction="row" spacing={3}>
+            <Input
+              placeholder="Type message here..."
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
+            />
+            <Button isDisabled={connection} onClick={sendMessage}>
+              Send
+            </Button>
+          </Stack>
+        )}
       </Stack>
     </Box>
   );
