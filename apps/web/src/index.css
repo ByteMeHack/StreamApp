@@ -27,22 +27,3 @@
   display: flex;
   flex-direction: column;
 }
-
-@media (max-width: 540px) {
-  .leftNav {
-    flex-direction: column;
-  }
-
-  .searchRoom {
-    width: 90%;
-  }
-
-}
-
-.leftNav {
-  flex-direction: row;
-}
-
-.searchRoom {
-  width: 50%;
-}
