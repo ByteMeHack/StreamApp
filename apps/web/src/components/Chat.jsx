@@ -39,7 +39,7 @@ export default function Chat({ room_id }) {
           Chat
         </Heading>
         <Stack overflow="scroll">
-          {messages.map((message) => {
+          {allMessages.map((message) => {
             return <Message key={message.contents} message={message} />;
           })}
         </Stack>
