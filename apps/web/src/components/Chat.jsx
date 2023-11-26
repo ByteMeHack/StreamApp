@@ -29,6 +29,7 @@ export default function Chat({ room_id }) {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.addEventListener("message", (event) => {
       arrayMessages.push(JSON.parse(event.data));
+      console.log(arrayMessages);
       setMessages(arrayMessages);
     });
   }, []);
