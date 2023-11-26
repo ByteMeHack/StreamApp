@@ -92,15 +92,20 @@ func ConnectToRoom(c *gin.Context) {
 		conn.WriteJSON(room.Messages[i])
 	}
 	log.Println("ConnectToRoom: all messages sent")
-
-	go ListenForIncomingMessages(roomId, userId, conn)
+	connDoneCh := make(chan bool)
+	go ListenForIncomingMessages(connDoneCh, roomId, userId, conn)
 	for {
-		conn.WriteJSON(
-			models.Message{
-				Contents:  "Hello, world!",
-				Timestamp: time.Now().Format("2006-01-02 15:04:05"),
-			})
-		time.Sleep(5 * time.Second)
+		select {
+		case <-connDoneCh:
+			return
+		default:
+			conn.WriteJSON(
+				models.Message{
+					Contents:  "Hello, world!",
+					Timestamp: time.Now().Format("2006-01-02 15:04:05"),
+				})
+			time.Sleep(5 * time.Second)
+		}
 	}
 }
 
@@ -109,20 +114,19 @@ func BroadcastMessageToRoom(roomId int64, message models.Message) {
 	for i := range room.Users {
 		conn := conns[roomId][room.Users[i].ID]
 		if conn == nil {
-			log.Printf("BroadcastMessageToRoom: user with id %d is not connected to room %d", room.Users[i].ID, roomId)
 			continue
 		}
 		conn.WriteJSON(message)
 	}
 }
 
-func ListenForIncomingMessages(roomId int64, userId int64, conn *websocket.Conn) {
+func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64, conn *websocket.Conn) {
 	for {
 		var message models.Message
 		err := conn.ReadJSON(&message)
 		if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
-			log.Printf("ConnectToRoom: connection closed by user %d", userId)
 			delete(conns[roomId], userId)
+			connDoneCh <- true
 			return
 		}
 		message.UserId = userId
