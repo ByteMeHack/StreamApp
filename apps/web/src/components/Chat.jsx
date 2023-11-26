@@ -38,6 +38,7 @@ export default function Chat({ room_id }) {
           <Input
             placeholder="Type message here..."
             onChange={(e) => setMessage(e.target.value)}
+            value={message}
           />
           <Button isDisabled={socketRef.current === null} onClick={sendMessage}>
             Send
