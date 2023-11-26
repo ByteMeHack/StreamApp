@@ -29,7 +29,6 @@ export default function Chat({ room_id }) {
     socketRef.current.addEventListener("message", (event) => {
       setMessages([...messages, JSON.parse(event.data)]);
     });
-    socketRef.current.close();
   }, []);
 
   return (
@@ -48,7 +47,13 @@ export default function Chat({ room_id }) {
             placeholder="Type message here..."
             onChange={(e) => setMessage(e.target.value)}
           />
-          <Button isDisabled={socketRef.current === null} onClick={sendMessage}>
+          <Button
+            isDisabled={socketRef.current === null}
+            onClick={() => {
+              sendMessage();
+              socketRef.current.close();
+            }}
+          >
             Send
           </Button>
         </Stack>
