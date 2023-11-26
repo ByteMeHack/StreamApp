@@ -6,6 +6,7 @@ export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [connection, setConnection] = useState(false);
+  const bottomRef = useRef(null);
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
