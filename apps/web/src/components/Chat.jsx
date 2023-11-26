@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  Heading,
-  Input,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, Button, Heading, Input, Stack } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 
@@ -14,7 +6,6 @@ export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
-  let allMessages;
   function sendMessage() {
     if (socketRef.current)
       socketRef.current.send(
@@ -28,7 +19,7 @@ export default function Chat({ room_id }) {
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.addEventListener("message", (event) => {
-      setMessages([...allMessages, JSON.parse(event.data)]);
+      setMessages([...messages, JSON.parse(event.data)]);
     });
   }, []);
 
@@ -39,7 +30,7 @@ export default function Chat({ room_id }) {
           Chat
         </Heading>
         <Stack overflow="scroll">
-          {allMessages.map((message) => {
+          {messages.map((message) => {
             return <Message key={message.contents} message={message} />;
           })}
         </Stack>
@@ -48,13 +39,7 @@ export default function Chat({ room_id }) {
             placeholder="Type message here..."
             onChange={(e) => setMessage(e.target.value)}
           />
-          <Button
-            isDisabled={socketRef.current === null}
-            onClick={() => {
-              sendMessage();
-              allMessages = messages
-            }}
-          >
+          <Button isDisabled={socketRef.current === null} onClick={sendMessage}>
             Send
           </Button>
         </Stack>
