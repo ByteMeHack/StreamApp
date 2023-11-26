@@ -43,7 +43,6 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		log.Println("CheckOrigin: ", r.Header.Get("Origin"))
 		return true
 	},
 }
@@ -77,10 +76,25 @@ func ConnectToRoom(c *gin.Context) {
 		log.Printf("ConnectToRoom: error occured when connecasdfting to room: %s", err.Error())
 		return
 	}
+	connDoneCh := make(chan bool)
 	defer conn.Close()
+	// In case user leaves the site without closing the connection
+	go func() {
+		<-c.Request.Context().Done()
+		connDoneCh <- true
+	}()
+
+	// In case user closes the connection
+	go func() {
+		<-connDoneCh
+		conn.Close()
+		delete(conns[roomId], userId)
+	}()
 
 	log.Printf("ConnectToRoom: new user joined with id: %d\n", userId)
 	conns[roomId][userId] = conn
+
+	// Send all messages to the user
 	for {
 		conn.ReadMessage()
 		if err == nil {
@@ -92,8 +106,10 @@ func ConnectToRoom(c *gin.Context) {
 		conn.WriteJSON(room.Messages[i])
 	}
 	log.Println("ConnectToRoom: all messages sent")
-	connDoneCh := make(chan bool)
+
 	go ListenForIncomingMessages(connDoneCh, roomId, userId, conn)
+
+	// Test messages
 	for {
 		select {
 		case <-connDoneCh:
@@ -124,8 +140,12 @@ func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64,
 	for {
 		var message models.Message
 		err := conn.ReadJSON(&message)
+		defer func() {
+			if err := recover(); err != nil {
+				log.Printf("ListenForIncomingMessages: error occured when reading message: %s", err)
+			}
+		}()
 		if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
-			delete(conns[roomId], userId)
 			connDoneCh <- true
 			return
 		}
@@ -134,6 +154,7 @@ func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64,
 		switch message.Type {
 		case models.LeftMessage:
 			DeleteUserFromRoom(roomId, userId)
+			connDoneCh <- true
 			Repo.Save(context.Background(), rooms[roomId])
 		case models.KickMessage:
 			if userId != rooms[roomId].OwnerId {
@@ -145,7 +166,9 @@ func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64,
 				log.Printf("ConnectToRoom: invalid user id")
 				continue
 			}
+
 			conns[roomId][kickedUserId].Close()
+			delete(conns[roomId], kickedUserId)
 			DeleteUserFromRoom(roomId, kickedUserId)
 			Repo.Save(context.Background(), rooms[roomId])
 		case models.RegularMessage:

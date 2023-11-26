@@ -47,7 +47,6 @@ func DeleteUserFromRoom(roomId int64, userId int64) {
 		if room.Users[i].ID == userId {
 			room.Users = append(room.Users[:i], room.Users[i+1:]...)
 			rooms[roomId] = room
-			delete(conns[roomId], userId)
 			return
 		}
 	}
