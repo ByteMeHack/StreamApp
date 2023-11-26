@@ -6,6 +6,7 @@ export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
+
   function sendMessage() {
     socketRef.current.send(
       JSON.stringify({
@@ -18,9 +19,14 @@ export default function Chat({ room_id }) {
 
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
-    socketRef.current.addEventListener("message", (event) => {
+    const listenMessage = (event) => {
       setMessages((messages) => messages.concat(JSON.parse(event.data)));
-    });
+    };
+    socketRef.current.addEventListener("message", listenMessage);
+    return function () {
+      socketRef.current.removeEventListener("message", listenMessage);
+      socketRef.current.close();
+    };
   }, []);
 
   return (
