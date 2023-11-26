@@ -7,13 +7,13 @@ export default function Chat({ room_id }) {
   const [messages, setMessages] = useState([]);
   const socketRef = useRef(null);
   function sendMessage() {
-    if (socketRef.current)
-      socketRef.current.send(
-        JSON.stringify({
-          message_type: 1,
-          contents: message,
-        })
-      );
+    socketRef.current.send(
+      JSON.stringify({
+        message_type: 1,
+        contents: message,
+      })
+    );
+    setMessage("");
   }
 
   useEffect(() => {
