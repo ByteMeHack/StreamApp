@@ -71,7 +71,9 @@ export default function Room() {
                     setRoom(res);
                     setNeedPass(false);
                   })
-                  .catch((err) => toast(showError(err.message)));
+                  .catch((err) =>
+                    toast(showError("Can't enter the room. Check the password"))
+                  );
               }}
             >
               Enter
