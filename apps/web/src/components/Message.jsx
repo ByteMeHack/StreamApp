@@ -1,6 +1,10 @@
 import { Stack, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { userSelector } from "../store/selectors";
 
 export default function Message({ message }) {
+  const user = useSelector(userSelector);
+  const isCurrUser = message.user_id === user.id;
   return (
     <Stack
       gap={2}
@@ -8,7 +12,8 @@ export default function Message({ message }) {
       flexDirection="column"
       width={300}
       height={100}
-      bgColor="gray"
+      bgColor={isCurrUser ? "red" : "gray"}
+      alignSelf={isCurrUser ? "flex-end" : ""}
       borderRadius={10}
       p={3}
     >
