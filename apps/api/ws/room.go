@@ -145,6 +145,7 @@ func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64,
 				log.Printf("ListenForIncomingMessages: error occured when reading message: %s", err)
 			}
 		}()
+		log.Printf("read message: %s", message)
 		if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
 			connDoneCh <- true
 			return
