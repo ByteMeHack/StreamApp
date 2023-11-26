@@ -98,24 +98,6 @@ func ConnectToRoom(c *gin.Context) {
 
 	go ListenForIncomingMessages(connDoneCh, roomId, userId)
 
-	// Test messages
-	go func() {
-		for {
-			select {
-			case <-connDoneCh:
-				connDoneCh <- true
-				return
-			default:
-				conn.WriteJSON(
-					models.Message{
-						Contents:  "Hello, world!",
-						Timestamp: time.Now().Format("2006-01-02 15:04:05"),
-					})
-				time.Sleep(5 * time.Second)
-			}
-		}
-	}()
-
 	// In case user closes the connection
 	go func() {
 		<-connDoneCh
