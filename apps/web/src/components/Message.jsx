@@ -14,7 +14,7 @@ export default function Message({ message }) {
     >
       <Text color="black">User: {message.user_id}</Text>
       <Text color="black">Message: {message.contents}</Text>
-      <Text color="black">Date:{message.timestamp}</Text>
+      <Text color="black">Date: {message.timestamp}</Text>
     </Stack>
   );
 }
