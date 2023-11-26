@@ -40,3 +40,12 @@ export const showSuccessRoomCreate = {
   status: "success",
   ...basicToast,
 };
+
+export function showError(message) {
+  return {
+    title: "Error",
+    description: message,
+    status: "error",
+    ...basicToast,
+  };
+}

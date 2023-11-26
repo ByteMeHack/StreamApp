@@ -8,14 +8,17 @@ import {
   Button,
   InputGroup,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import Chat from "../components/Chat";
 import { useEffect, useState } from "react";
 import { getRoomById, registerToRoom } from "../api";
+import { showError } from "../utils/Toasts";
 
 export default function Room() {
   const id = useParams().id;
+  const toast = useToast();
   const [room, setRoom] = useState(null);
   const [needPass, setNeedPass] = useState(false);
   const [pass, setPass] = useState("");
@@ -63,10 +66,12 @@ export default function Room() {
             </InputGroup>
             <Button
               onClick={async () => {
-                await registerToRoom(id, pass).then((res) => {
-                  setRoom(res);
-                  setNeedPass(false);
-                });
+                await registerToRoom(id, pass)
+                  .then((res) => {
+                    setRoom(res);
+                    setNeedPass(false);
+                  })
+                  .catch((err) => toast(showError(err.message)));
               }}
             >
               Enter
