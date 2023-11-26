@@ -29,7 +29,7 @@ export default function Chat({ room_id }) {
         <Heading size="sm" color="white" className="grayblock">
           Chat
         </Heading>
-        <Stack overflow="scroll">
+        <Stack overflow="scroll" height="50%">
           {messages.map((message) => {
             return <Message key={message.contents} message={message} />;
           })}
