@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 
 export default function Chat({ room_id }) {
-  const [message, setMessage] = useState("");
-  const messages = [];
+  const [messages, setMessages] = useState([]);
+  const message = "";
   const socketRef = useRef(null);
   function sendMessage() {
     if (socketRef.current)
@@ -19,7 +19,7 @@ export default function Chat({ room_id }) {
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
     socketRef.current.addEventListener("message", (event) => {
-      messages.push(JSON.parse(event.data));
+      setMessages([...messages, JSON.parse(event.data)]);
     });
   }, []);
 
@@ -37,7 +37,7 @@ export default function Chat({ room_id }) {
         <Stack direction="row" spacing={3}>
           <Input
             placeholder="Type message here..."
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => (message = e.target.value)}
           />
           <Button isDisabled={socketRef.current === null} onClick={sendMessage}>
             Send
