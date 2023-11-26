@@ -6,6 +6,7 @@ export default function Chat({ room_id }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [connection, setConnection] = useState(false);
+  const [pending, setPending] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -27,6 +28,10 @@ export default function Chat({ room_id }) {
 
   useEffect(() => {
     socketRef.current = new WebSocket(`ws://bytemehack.ru/api/room/${room_id}`);
+
+    if (socketRef.current.readyState == WebSocket.CONNECTING) {
+      setPending(true);
+    }
     if (socketRef.current.readyState == WebSocket.OPEN) {
       setConnection(true);
     }
@@ -53,6 +58,18 @@ export default function Chat({ room_id }) {
           })}
           <div ref={bottomRef} />
         </Stack>
+        <Button
+          onClick={() => {
+            socketRef.current.send(
+              JSON.stringify({
+                message_type: 0,
+                contents: "Entering room",
+              })
+            );
+          }}
+        >
+          Connect
+        </Button>
         <Stack direction="row" spacing={3}>
           <Input
             placeholder="Type message here..."
