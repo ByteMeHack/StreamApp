@@ -29,6 +29,7 @@ export default function Chat({ room_id }) {
     socketRef.current.addEventListener("message", (event) => {
       setMessages([...messages, JSON.parse(event.data)]);
     });
+    socketRef.current.close();
   }, []);
 
   return (
