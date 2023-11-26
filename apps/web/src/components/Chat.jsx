@@ -51,7 +51,6 @@ export default function Chat({ room_id }) {
             isDisabled={socketRef.current === null}
             onClick={() => {
               sendMessage();
-              socketRef.current.close();
             }}
           >
             Send
