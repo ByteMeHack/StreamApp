@@ -129,6 +129,7 @@ func ConnectToRoom(c *gin.Context) {
 		connDoneCh <- true
 		return
 	case <-c.Request.Context().Done():
+		log.Println("ConnectToRoom: context done")
 		connDoneCh <- true
 	}
 }
@@ -152,13 +153,24 @@ func ListenForIncomingMessages(connDoneCh chan bool, roomId int64, userId int64)
 			return
 		}
 		var message models.Message
-		err := conn.ReadJSON(&message)
 		defer func() {
 			if err := recover(); err != nil {
+				connDoneCh <- true
 				log.Printf("ListenForIncomingMessages: error occured when reading message: %s", err)
 			}
 		}()
+		err := conn.ReadJSON(&message)
 		log.Printf("read message: %+v", message)
+
+		if ce, ok := err.(*websocket.CloseError); ok {
+			switch ce.Code {
+			case websocket.CloseNormalClosure,
+				websocket.CloseGoingAway,
+				websocket.CloseNoStatusReceived:
+				connDoneCh <- true
+				return
+			}
+		}
 		if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
 			connDoneCh <- true
 			return
