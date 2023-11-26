@@ -114,10 +114,6 @@ func ConnectToRoom(c *gin.Context) {
 			}
 		}
 	}()
-	go func() {
-		<-c.Request.Context().Done()
-		connDoneCh <- true
-	}()
 
 	// In case user closes the connection
 	go func() {
@@ -126,9 +122,12 @@ func ConnectToRoom(c *gin.Context) {
 		delete(conns[roomId], userId)
 		log.Println("deleted connection")
 	}()
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
-	defer cancel()
-	<-ctx.Done()
+	select {
+	case <-connDoneCh:
+		return
+	case <-c.Request.Context().Done():
+		connDoneCh <- true
+	}
 }
 
 func BroadcastMessageToRoom(roomId int64, message models.Message) {
