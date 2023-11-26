@@ -7,7 +7,8 @@ RUN GOOS=linux go build -o ./build ./
 
 FROM ubuntu
 # ADD ./internal/adapters/db/postgres/migrations /migrations
-# ADD ./.aws /root/.aws
+COPY ./static ./static
 COPY --from=builder /app/build /app
+RUN chmod +x /app
 EXPOSE 8080 8080
-CMD ["./app"]
+CMD ["/app"]

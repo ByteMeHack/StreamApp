@@ -52,11 +52,12 @@ func main() {
 	if err := db.SetupJoinTable(&repository.User{}, "Rooms", &repository.UserRoom{}); err != nil {
 		log.Fatalf("couldn't setup join table for users: %s", err.Error())
 	}
-
 	ws.Init(db)
 
 	e := gin.Default()
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	// this endpoint is used to serve files to the client
+	e.Static("/.well-known", "./static")
 	e.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "We gucci"})
 	})
