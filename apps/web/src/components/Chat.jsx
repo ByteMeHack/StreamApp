@@ -10,7 +10,7 @@ export default function Chat({ room_id }) {
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
 
   const socketRef = useRef(null);
