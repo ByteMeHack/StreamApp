@@ -34,30 +34,25 @@ export default function Chat({ room_id }) {
 
   return (
     <Box className="blackBlock" p={3}>
-      <Card>
+      <Stack>
         <Heading size="sm" color="white" className="grayblock">
           Chat
         </Heading>
-        <CardBody bgColor="gray">
-          <Stack>
-            {messages.map((message) => {
-              return <Message message={message} />;
-            })}
-          </Stack>
-          <Stack direction="row" spacing={3}>
-            <Input
-              placeholder="Type message here..."
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <Button
-              isDisabled={socketRef.current === null}
-              onClick={sendMessage}
-            >
-              Send
-            </Button>
-          </Stack>
-        </CardBody>
-      </Card>
+        <Stack>
+          {messages.map((message) => {
+            return <Message message={message} />;
+          })}
+        </Stack>
+        <Stack direction="row" spacing={3}>
+          <Input
+            placeholder="Type message here..."
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <Button isDisabled={socketRef.current === null} onClick={sendMessage}>
+            Send
+          </Button>
+        </Stack>
+      </Stack>
     </Box>
   );
 }
