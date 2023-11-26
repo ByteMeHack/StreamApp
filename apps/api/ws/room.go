@@ -103,6 +103,7 @@ func ConnectToRoom(c *gin.Context) {
 		for {
 			select {
 			case <-connDoneCh:
+				connDoneCh <- true
 				return
 			default:
 				conn.WriteJSON(
@@ -118,12 +119,14 @@ func ConnectToRoom(c *gin.Context) {
 	// In case user closes the connection
 	go func() {
 		<-connDoneCh
+		connDoneCh <- true
 		conn.Close()
 		delete(conns[roomId], userId)
 		log.Println("deleted connection")
 	}()
 	select {
 	case <-connDoneCh:
+		connDoneCh <- true
 		return
 	case <-c.Request.Context().Done():
 		connDoneCh <- true
