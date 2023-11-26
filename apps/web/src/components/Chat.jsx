@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 
 export default function Chat({ room_id }) {
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  let message = "";
   const socketRef = useRef(null);
   function sendMessage() {
     if (socketRef.current)
@@ -37,7 +37,7 @@ export default function Chat({ room_id }) {
         <Stack direction="row" spacing={3}>
           <Input
             placeholder="Type message here..."
-            onChange={(e) => (message = e.target.value)}
+            onChange={(e) => setMessage(e.target.value)}
           />
           <Button isDisabled={socketRef.current === null} onClick={sendMessage}>
             Send
