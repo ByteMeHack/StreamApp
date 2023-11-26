@@ -101,7 +101,6 @@ export default function Room() {
               {room.name}
             </Heading>
             <CardBody className="blackBlock">
-              <Input type="range" value={20} min={0} max={200} />
               <Chat room_id={room.id} />
             </CardBody>
           </Card>
